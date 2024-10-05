@@ -1,4 +1,4 @@
-#from utils.LLM import full_flow
+from utils.LLM import full_flow
 from utils.sensors import fetch_sensor_data, calibrate_gyroscope, read_gyroscope, read_accelerometer
 from utils.sound import create_sound, update_volume
 import threading
@@ -7,7 +7,7 @@ import time # For testing purposes
 
 
 fetch_sensor_data() #Image capture
-#target_degrees = full_flow() # Image analysis
+target_degrees = full_flow() # Image analysis
 target_degrees = 225
 
 gyro_degrees = 0
