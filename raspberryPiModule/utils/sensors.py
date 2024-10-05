@@ -42,7 +42,7 @@ def take_picture(num, val):
     update_volume(None, False, 0)
 
     camera.start_preview()
-    time.sleep(0.8)  # Give the camera time to adjust to lighting
+    time.sleep(1)  # Give the camera time to adjust to lighting
 
     # Capture the image
     camera.capture(image_path)
@@ -52,6 +52,10 @@ def take_picture(num, val):
 
     # Close the camera
     camera.close()
+
+    update_volume(135)
+    time.sleep(0.2)
+    update_volume(None, False, 0)
 
     print(f"Image saved at {image_path} at gyro value of {val}")
 
@@ -123,7 +127,7 @@ def fetch_sensor_data():
     # Step 2: Read live data and apply calibration
     print("Reading live gyroscope data and wrapping Z-axis to 0-360 degrees...")
 
-    while not pictures_taken[2]:
+    while True:
         # Read gyroscope data and subtract offsets
         gyro_x, gyro_y, gyro_z = read_gyroscope()
         calibrated_gyro_x = gyro_x - gyro_offset_x
@@ -164,6 +168,7 @@ def fetch_sensor_data():
         elif angle_z > 230 and not pictures_taken[2] and pictures_taken[1]:
             take_picture(4, angle_z)
             pictures_taken[2] = True
+            break
 
         # Print the live angle values (with Z-axis wrapped)
         print(f"Angles (X: {angle_x:.2f}, Y: {angle_y:.2f}, Z: {angle_z:.2f})")
