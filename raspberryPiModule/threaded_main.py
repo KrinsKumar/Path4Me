@@ -3,14 +3,17 @@ from utils.sensors import fetch_sensor_data, calibrate_gyroscope, read_gyroscope
 from utils.sound import create_sound, update_volume
 import threading
 import math
-import time # For testing purposes
+import time
 
-
-#fetch_sensor_data() #Image capture
-#target_degrees = full_flow() # Image analysis
+# fetch_sensor_data() # Image capture
+# target_degrees = full_flow() # Image analysis
 target_degrees = 225
 
 gyro_degrees = 0
+gyro_lock = threading.Lock()
+
+def low_pass_filter(value, prev_value, alpha=0.5):
+    return alpha * prev_value + (1 - alpha) * value
 
 def capture_gyro_data():
     global gyro_degrees
@@ -32,7 +35,6 @@ def capture_gyro_data():
     prev_accel_y = 0.0
     prev_accel_z = 0.0
 
-    # Step 2: Read live data and apply calibration
     print("Reading live gyroscope data and wrapping Y-axis to 0-360 degrees...")
 
     while True:
@@ -77,43 +79,43 @@ def capture_gyro_data():
         # Wrap the Y-axis angle to stay within 0-360 degrees
         angle_y = angle_y % 360  # Ensures angle stays between 0 and 360
 
-        gyro_degrees = angle_y
+        # Update the global gyro_degrees variable with a lock
+        with gyro_lock:
+            gyro_degrees = angle_y
 
 def call_sound_generator():
     global gyro_degrees
     global target_degrees
 
     while True:
-        a1 = abs(gyro_degrees - target_degrees)
+        with gyro_lock:
+            current_gyro_degrees = gyro_degrees
+
+        a1 = abs(current_gyro_degrees - target_degrees)
         a2 = 360 - a1
 
-        print(f"Sound emmited for gyro: {gyro_degrees} | target: {target_degrees}")
+        print(f"Sound emitted for gyro: {current_gyro_degrees} | target: {target_degrees}")
 
         if a1 > 90 and a2 > 90:
             update_volume(135, True)
             continue
         
-        A = target_degrees - gyro_degrees
+        A = target_degrees - current_gyro_degrees
         if A > 180 or A < -180:
             B = 360 - abs(A)
-            if target_degrees > gyro_degrees:
-                update_volume(135 + B/2)
+            if target_degrees > current_gyro_degrees:
+                update_volume(135 + B / 2)
             else:
-                update_volume(135 - B/2)
+                update_volume(135 - B / 2)
         else:
-            update_volume(135 - A/2)
-
+            update_volume(135 - A / 2)
 
 t1 = threading.Thread(target=capture_gyro_data)
 t2 = threading.Thread(target=call_sound_generator)
-t3 = threading.Thread(target=create_sound)
 
 if __name__ == "__main__":
     t1.start()
     t2.start()
-    t3.start()
-    
 
     t1.join()
-    t2.join() 
-    t3.join()  
+    t2.join()
