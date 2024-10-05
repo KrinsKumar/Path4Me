@@ -1,15 +1,10 @@
-from utils.LLM import full_flow
-from utils.sound import create_sound, update_volume
-import threading
-import math
 import time
 from mpu6050 import mpu6050  # Ensure you have a compatible MPU6050 library installed
 
 # Create an instance of the MPU6050 class
 mpu = mpu6050(0x68)  # Adjust the I2C address if necessary
-import time # For testing purposes
 
-
+# Initialize the MPU6050 and print initial messages
 def setup():
     print("Initializing MPU6050...")
     time.sleep(1)  # Allow time for MPU6050 to start
@@ -17,7 +12,6 @@ def setup():
 
 def calibrate_gyro():
     print("Calculating gyro offset, do not move MPU6050...")
-    time.sleep(10)
     n_samples = 1000
     gyro_offsets = {'x': 0, 'y': 0, 'z': 0}
 
@@ -38,17 +32,7 @@ def calibrate_gyro():
 
     return gyro_offsets
 
-#fetch_sensor_data() #Image capture
-#target_degrees = full_flow() # Image analysis
-target_degrees = 225
-gyro_degrees = 0
-
-setup()
-gyro_offsets = calibrate_gyro()
-
-def loop_pure(gyro_offsets):
-
-    global gyro_degrees
+def loop(gyro_offsets):
     timer = time.time()  # Start the timer
     current_angle_x = 0  # Initialize the current angle
 
@@ -68,50 +52,28 @@ def loop_pure(gyro_offsets):
             # Update the current angle based on gyro X reading
             current_angle_x += corrected_gyro['x'] * 0.1  # Scale the gyro reading to time passed
             current_angle_x = current_angle_x % 360  # Normalize to 0-360 degrees
+            
+            if current_angle_x > 88 and current_angle_x < 92 and not pictures_taken[0]:
+                take_picture(2, current_angle_x)
+                pictures_taken[0] = True
+            elif current_angle_x > 178 and current_angle_x < 182 and not pictures_taken[1] and pictures_taken[0]:
+                take_picture(3, current_angle_x)
+                pictures_taken[1] = True
+            elif current_angle_x > 268 and current_angle_x < 272 and not pictures_taken[2] and pictures_taken[1]:
+                take_picture(4, current_angle_x)
+                pictures_taken[2] = True
+                break
 
             # Print the data to the console
             print(f"Current Angle X: {current_angle_x:.2f}° | R: {corrected_gyro['y']:.2f} | Y: {corrected_gyro['z']:.2f}")
             print(f"Accel: X={accel_data['x']:.2f} | Y={accel_data['y']:.2f} | Z={accel_data['z']:.2f}")
+
+            timer = time.time()  # Reset timer
             
-            gyro_degrees = current_angle_x
-            
-            timer = time.time() 
-
-def call_sound_generator():
-    global gyro_degrees
-    global target_degrees
-
-    while True:
-        a1 = abs(gyro_degrees - target_degrees)
-        a2 = 360 - a1
-
-        #print(f"Sound emmited for gyro: {gyro_degrees} | target: {target_degrees}")
-
-        if a1 > 90 and a2 > 90:
-            update_volume(135, True)
-            continue
-        
-        A = target_degrees - gyro_degrees
-        if A > 180 or A < -180:
-            B = 360 - abs(A)
-            if target_degrees > gyro_degrees:
-                update_volume(135 + B/2)
-            else:
-                update_volume(135 - B/2)
-        else:
-            update_volume(135 - A/2)
 
 
-t1 = threading.Thread(target=loop_pure, args=(gyro_offsets,))
-t2 = threading.Thread(target=call_sound_generator)
-t3 = threading.Thread(target=create_sound)
 
 if __name__ == "__main__":
-    t1.start()
-    t2.start()
-    t3.start()
-    
-
-    t1.join()
-    t2.join() 
-    t3.join()  
+    setup()
+    gyro_offsets = calibrate_gyro()  # Call the calibration function
+    loop(gyro_offsets)  # Pass the offsets to the loop
