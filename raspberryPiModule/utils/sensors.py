@@ -3,7 +3,7 @@ import time
 import smbus
 from picamera import PiCamera
 import math
-from sound import update_volume
+from utils.sound import update_volume
 
 # MPU6050 Registers
 PWR_MGMT_1 = 0x6B
@@ -38,13 +38,15 @@ def take_picture(num, val):
 
     # Start the camera preview (optional)
     update_volume(135)
+    time.sleep(0.2)
+    update_volume(None, False, 0)
+
     camera.start_preview()
-    time.sleep(1)  # Give the camera time to adjust to lighting
+    time.sleep(0.8)  # Give the camera time to adjust to lighting
 
     # Capture the image
     camera.capture(image_path)
-    update_volume(None, False, 0)
-
+    
     # Stop the camera preview (optional)
     camera.stop_preview()
 
