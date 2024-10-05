@@ -22,7 +22,7 @@ allUrls = ["https://res.cloudinary.com/djxkc3pxx/image/upload/v1728102994/1.jpg"
 
 # requires the photos in the assets folder
 def add_lines():
-  images = ["../raspberryPi/assets/1.jpg", "../raspberryPi/assets/2.jpg", "../raspberryPi/assets/3.jpg", "../raspberryPi/assets/4.jpg"]
+  images = ["./assets/1.jpg", "./assets/2.jpg", "./assets/3.jpg", "./assets/4.jpg"]
   # Ensure the "converted" directory exists
   os.makedirs("converted", exist_ok=True)
 

@@ -2,7 +2,7 @@ import time
 import os
 from picamera import PiCamera
 import smbus
-from ../angleA/photo import full_flow
+from photo import full_flow
 
 # MPU6050 Registers
 PWR_MGMT_1 = 0x6B
