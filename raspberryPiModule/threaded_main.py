@@ -1,28 +1,70 @@
-from utils.LLM import full_flow
-from utils.sensors import fetch_sensor_data
+#from utils.LLM import full_flow
+from utils.sensors import fetch_sensor_data, calibrate_gyroscope, read_gyroscope
 import threading
 import time # For testing purposes
 
 fetch_sensor_data() #Image capture
-target_degrees = full_flow() # Image analysis
+#target_degrees = full_flow() # Image analysis
+target_degrees = 220
 
 gyro_degrees = 0
 
 def capture_gyro_data():
     global gyro_degrees
 
-    # Capture gyro data
+    gyro_offset_x, gyro_offset_y, gyro_offset_z = calibrate_gyroscope()
+
+    angle_x = 0.0
+    angle_y = 0.0
+    angle_z = 0.0
+
+    prev_time = time.time()
+
     while True:
-        for i in range(20, 210):
-            gyro_degrees = i
-            time.sleep(0.1)
+        gyro_x, gyro_y, gyro_z = read_gyroscope()
+        calibrated_gyro_x = gyro_x - gyro_offset_x
+        calibrated_gyro_y = gyro_y - gyro_offset_y
+        calibrated_gyro_z = gyro_z - gyro_offset_z
+
+        current_time = time.time()
+        dt = current_time - prev_time
+        prev_time = current_time
+
+        gyro_sensitivity = 131.0
+        angle_x += (calibrated_gyro_x / gyro_sensitivity) * dt
+        angle_y += (calibrated_gyro_y / gyro_sensitivity) * dt
+        angle_z += (calibrated_gyro_z / gyro_sensitivity) * dt
+
+        angle_z = angle_z % 360
+
+        gyro_degrees = angle_z
+
+def sound_generator(angle, beep=False):
+    # Play sound
+    print(f"Playing sound. At the angle: {angle}. [Gyro: {gyro_degrees}]")
 
 def call_sound_generator():
     global gyro_degrees
     global target_degrees
 
     while True:
-        print("Playing sound. User is facing: ", gyro_degrees, " | Target is at: ", target_degrees)
+        a1 = abs(gyro_degrees - target_degrees)
+        a2 = 360 - a1
+
+        if a1 > 90 and a2 > 90:
+            sound_generator(135, True)
+            continue
+        
+        A = target_degrees - gyro_degrees
+        if A > 180 or A < -180:
+            B = 360 - abs(A)
+            if target_degrees > gyro_degrees:
+                sound_generator(135 + B/2)
+            else:
+                sound_generator(135 - B/2)
+        else:
+            sound_generator(135 - A/2)
+
         time.sleep(0.05)
 
 t1 = threading.Thread(target=capture_gyro_data)
