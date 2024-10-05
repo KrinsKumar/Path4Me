@@ -89,10 +89,13 @@ def analyze_photos():
   )
   print(response.choices[0])
 
-def main():
+def full_flow():
   add_lines()
   upload_photos()
   # analyze_photos()
+
+def main():
+  full_flow()
 
 if __name__ == "__main__":
   main()
