@@ -1,14 +1,19 @@
 import os
 import time
-
 import smbus
 from picamera import PiCamera
+import math
 
 # MPU6050 Registers
 PWR_MGMT_1 = 0x6B
 GYRO_XOUT_H = 0x43
 GYRO_YOUT_H = 0x45
 GYRO_ZOUT_H = 0x47
+
+# MPU6050 Accelerometer Registers
+ACCEL_XOUT_H = 0x3B
+ACCEL_YOUT_H = 0x3D
+ACCEL_ZOUT_H = 0x3F
 
 bus = smbus.SMBus(1)  # Open the I2C bus
 address = 0x68  # MPU-6050 address
@@ -19,6 +24,7 @@ if not os.path.exists(image_folder):
 
 # Wake up MPU6050
 bus.write_byte_data(address, PWR_MGMT_1, 0)
+
 
 
 def take_picture(num, val):
@@ -44,7 +50,6 @@ def take_picture(num, val):
 
     print(f"Image saved at {image_path} at gyro value of {val}")
 
-
 def read_word(reg):
     high = bus.read_byte_data(address, reg)
     low = bus.read_byte_data(address, reg + 1)
@@ -53,6 +58,11 @@ def read_word(reg):
         value = -(65535 - value + 1)
     return value
 
+def read_accelerometer():
+    accel_x = read_word(ACCEL_XOUT_H)
+    accel_y = read_word(ACCEL_YOUT_H)
+    accel_z = read_word(ACCEL_ZOUT_H)
+    return accel_x, accel_y, accel_z
 
 def read_gyroscope():
     gyro_x = read_word(GYRO_XOUT_H)
@@ -102,6 +112,9 @@ def fetch_sensor_data():
 
     prev_time = time.time()
 
+    # Complementary filter constant
+    alpha = 0.98
+
     # Step 2: Read live data and apply calibration
     print("Reading live gyroscope data and wrapping Z-axis to 0-360 degrees...")
 
@@ -112,17 +125,27 @@ def fetch_sensor_data():
         calibrated_gyro_y = gyro_y - gyro_offset_y
         calibrated_gyro_z = gyro_z - gyro_offset_z
 
+        # Read accelerometer data
+        accel_x, accel_y, accel_z = read_accelerometer()
+
         # Calculate time difference (dt)
         current_time = time.time()
         dt = current_time - prev_time
         prev_time = current_time
 
         # Convert gyroscope values to angular displacement (in degrees)
-        # Sensitivity is usually 131 LSB per degree/s for the MPU-6050 by default
         gyro_sensitivity = 131.0
         angle_x += (calibrated_gyro_x / gyro_sensitivity) * dt
         angle_y += (calibrated_gyro_y / gyro_sensitivity) * dt
         angle_z += (calibrated_gyro_z / gyro_sensitivity) * dt
+
+        # Calculate accelerometer angles
+        accel_angle_x = math.atan2(accel_y, accel_z) * 180 / math.pi
+        accel_angle_y = math.atan2(-accel_x, math.sqrt(accel_y**2 + accel_z**2)) * 180 / math.pi
+
+        # Apply complementary filter
+        angle_x = alpha * angle_x + (1 - alpha) * accel_angle_x
+        angle_y = alpha * angle_y + (1 - alpha) * accel_angle_y
 
         # Wrap the Z-axis angle (yaw) to stay within 0-360 degrees
         angle_z = angle_z % 360  # Ensures angle stays between 0 and 360
