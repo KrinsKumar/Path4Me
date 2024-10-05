@@ -33,7 +33,7 @@ def take_picture(num, val):
     # Start the camera preview (optional)
     subprocess.run(["mpg123", "utils/notif.mp3"])
     camera.start_preview()
-    time.sleep(0.5)  # Give the camera time to adjust to lighting
+    # time.sleep(0.5)  # Give the camera time to adjust to lighting
 
     # Capture the image
     camera.capture(image_path)
