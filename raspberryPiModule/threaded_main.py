@@ -12,10 +12,6 @@ target_degrees = 225
 
 gyro_degrees = 0
 
-
-def low_pass_filter(value, prev_value, alpha=0.5):
-    return alpha * prev_value + (1 - alpha) * value
-
 def capture_gyro_data():
     global gyro_degrees
 
@@ -29,10 +25,6 @@ def capture_gyro_data():
 
     alpha = 0.98
 
-    prev_accel_x = 0.0
-    prev_accel_y = 0.0
-    prev_accel_z = 0.0
-
     while True:
         gyro_x, gyro_y, gyro_z = read_gyroscope()
         calibrated_gyro_x = gyro_x - gyro_offset_x
@@ -40,14 +32,6 @@ def capture_gyro_data():
         calibrated_gyro_z = gyro_z - gyro_offset_z
 
         accel_x, accel_y, accel_z = read_accelerometer()
-
-        accel_x = low_pass_filter(accel_x, prev_accel_x)
-        accel_y = low_pass_filter(accel_y, prev_accel_y)
-        accel_z = low_pass_filter(accel_z, prev_accel_z)
-
-        prev_accel_x = accel_x
-        prev_accel_y = accel_y
-        prev_accel_z = accel_z
 
         current_time = time.time()
         dt = current_time - prev_time
@@ -64,7 +48,7 @@ def capture_gyro_data():
         angle_x = alpha * angle_x + (1 - alpha) * accel_angle_x
         angle_y = alpha * angle_y + (1 - alpha) * accel_angle_y
 
-        angle_x = angle_x % 360
+        #angle_x = angle_x % 360
 
         gyro_degrees = angle_x
 
