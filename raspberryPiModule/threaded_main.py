@@ -12,6 +12,7 @@ target_degrees = 225
 
 gyro_degrees = 0
 
+
 def low_pass_filter(value, prev_value, alpha=0.5):
     return alpha * prev_value + (1 - alpha) * value
 
@@ -27,6 +28,10 @@ def capture_gyro_data():
     prev_time = time.time()
 
     alpha = 0.98
+
+    prev_accel_x = 0.0
+    prev_accel_y = 0.0
+    prev_accel_z = 0.0
 
     while True:
         gyro_x, gyro_y, gyro_z = read_gyroscope()
@@ -61,13 +66,16 @@ def capture_gyro_data():
 
         angle_y = angle_y % 360
 
-        gyro_degrees = angle_y
+        with gyro_lock:
+            gyro_degrees = angle_y
 
 def call_sound_generator():
     global gyro_degrees
     global target_degrees
 
     while True:
+        with gyro_lock:
+            current_gyro_degrees = gyro_degrees
         a1 = abs(gyro_degrees - target_degrees)
         a2 = 360 - a1
 
