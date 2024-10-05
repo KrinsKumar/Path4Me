@@ -37,10 +37,6 @@ def take_picture(num, val):
     image_path = os.path.join(image_folder, image_name)
 
     # Start the camera preview (optional)
-    update_volume(135)
-    time.sleep(0.2)
-    update_volume(None, False, 0)
-
     camera.start_preview()
     time.sleep(1)  # Give the camera time to adjust to lighting
 
@@ -52,10 +48,6 @@ def take_picture(num, val):
 
     # Close the camera
     camera.close()
-
-    update_volume(135)
-    time.sleep(0.2)
-    update_volume(None, False, 0)
 
     print(f"Image saved at {image_path} at gyro value of {val}")
 
