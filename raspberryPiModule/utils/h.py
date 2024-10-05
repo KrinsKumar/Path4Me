@@ -1,5 +1,17 @@
 import time
 from mpu6050 import mpu6050  # Ensure you have a compatible MPU6050 library installed
+import os
+import time
+import smbus
+from picamera import PiCamera
+import math
+from utils.sound import update_volume
+import subprocess
+
+image_folder = "assets"  # The folder with the images
+if not os.path.exists(image_folder):
+    os.makedirs(image_folder)
+
 
 # Create an instance of the MPU6050 class
 mpu = mpu6050(0x68)  # Adjust the I2C address if necessary
@@ -9,6 +21,30 @@ def setup():
     print("Initializing MPU6050...")
     time.sleep(1)  # Allow time for MPU6050 to start
     print("MPU6050 ready.")
+
+def take_picture(num, val):
+    # Initialize PiCamera
+    camera = PiCamera()
+
+    # Capture image
+    image_name = f"{num}.jpg"  # Unique name based on timestamp
+    image_path = os.path.join(image_folder, image_name)
+
+    # Start the camera preview (optional)
+    subprocess.run(["mpg123", "utils/notif.mp3"])
+    camera.start_preview()
+    time.sleep(0.5)  # Give the camera time to adjust to lighting
+
+    # Capture the image
+    camera.capture(image_path)
+    
+    # Stop the camera preview (optional)
+    camera.stop_preview()
+
+    # Close the camera
+    camera.close()
+
+    print(f"Image saved at {image_path} at gyro value of {val}")
 
 def calibrate_gyro():
     print("Calculating gyro offset, do not move MPU6050...")
@@ -35,6 +71,8 @@ def calibrate_gyro():
 def loop(gyro_offsets):
     timer = time.time()  # Start the timer
     current_angle_x = 0  # Initialize the current angle
+    pictures_taken = [False, False, False]
+    take_picture(1, 0)
 
     while True:
         if (time.time() - timer) > 0.1:  # Print data every 100ms

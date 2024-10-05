@@ -1,5 +1,6 @@
 from utils.LLM import full_flow
 from utils.sound import create_sound, update_volume
+from utils.h import loop
 import threading
 import math
 import time
@@ -7,13 +8,6 @@ from mpu6050 import mpu6050  # Ensure you have a compatible MPU6050 library inst
 
 # Create an instance of the MPU6050 class
 mpu = mpu6050(0x68)  # Adjust the I2C address if necessary
-import time # For testing purposes
-
-
-def setup():
-    print("Initializing MPU6050...")
-    time.sleep(1)  # Allow time for MPU6050 to start
-    print("MPU6050 ready.")
 
 def calibrate_gyro():
     print("Calculating gyro offset, do not move MPU6050...")
@@ -38,13 +32,19 @@ def calibrate_gyro():
 
     return gyro_offsets
 
-#fetch_sensor_data() #Image capture
-#target_degrees = full_flow() # Image analysis
-target_degrees = 225
+def setup():
+    print("Initializing MPU6050...")
+    time.sleep(1)  # Allow time for MPU6050 to start
+    print("MPU6050 ready.")
+setup()
+
+gyro_offsets = calibrate_gyro()
+
+loop(gyro_offsets) #Image capture
+target_degrees = full_flow() or 220
 gyro_degrees = 0
 
-setup()
-gyro_offsets = calibrate_gyro()
+
 
 def loop_pure(gyro_offsets):
 
@@ -53,7 +53,7 @@ def loop_pure(gyro_offsets):
     current_angle_x = 0  # Initialize the current angle
 
     while True:
-        if (time.time() - timer) > 0.1:  # Print data every 100ms
+        if (time.time() - timer) > 0.1:
             # Read accelerometer and gyroscope data
             accel_data = mpu.get_accel_data()
             gyro_data = mpu.get_gyro_data()
@@ -70,8 +70,7 @@ def loop_pure(gyro_offsets):
             current_angle_x = current_angle_x % 360  # Normalize to 0-360 degrees
 
             # Print the data to the console
-            print(f"Current Angle X: {current_angle_x:.2f}° | R: {corrected_gyro['y']:.2f} | Y: {corrected_gyro['z']:.2f}")
-            print(f"Accel: X={accel_data['x']:.2f} | Y={accel_data['y']:.2f} | Z={accel_data['z']:.2f}")
+            print(f"Current Angle X: {current_angle_x:.2f}, Target Degrees: {target_degrees: .2f}")
             
             gyro_degrees = current_angle_x
             
