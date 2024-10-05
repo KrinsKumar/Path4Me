@@ -21,6 +21,8 @@ def capture_gyro_data():
 
     prev_time = time.time()
 
+    alpha = 0.98
+
     while True:
         gyro_x, gyro_y, gyro_z = read_gyroscope()
         calibrated_gyro_x = gyro_x - gyro_offset_x
