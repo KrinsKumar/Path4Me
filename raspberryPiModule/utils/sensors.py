@@ -4,6 +4,7 @@ import smbus
 from picamera import PiCamera
 import math
 from utils.sound import update_volume
+from playsound import playsound
 
 # MPU6050 Registers
 PWR_MGMT_1 = 0x6B
@@ -37,6 +38,7 @@ def take_picture(num, val):
     image_path = os.path.join(image_folder, image_name)
 
     # Start the camera preview (optional)
+    playsound(f"utils/notif.mp3")
     camera.start_preview()
     time.sleep(1)  # Give the camera time to adjust to lighting
 
