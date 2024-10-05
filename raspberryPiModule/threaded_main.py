@@ -11,6 +11,7 @@ import time # For testing purposes
 target_degrees = 225
 
 gyro_degrees = 0
+gyro_lock = threading.Lock()
 
 
 def low_pass_filter(value, prev_value, alpha=0.5):
