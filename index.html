@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spatial Audio</title>
+</head>
+<body>
+  <button id="playButton">Play Sound</button>
+
+  <script>
+    async function playSpatialAudio(angleInDegrees) {
+      // Create AudioContext
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+      // Fetch the audio file (use any sound file URL here)
+      const response = await fetch('your-audio-file.mp3');
+      const arrayBuffer = await response.arrayBuffer();
+      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+      // Create a buffer source (the actual sound)
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+
+      // Create a panner node for spatialization
+      const panner = audioContext.createPanner();
+      panner.panningModel = 'HRTF';  // HRTF gives a more realistic sound for headphones
+      panner.distanceModel = 'inverse';  // How volume fades as distance increases
+      panner.refDistance = 1;  // Reference distance for reducing volume
+      panner.maxDistance = 10000;  // Max distance at which volume reduction stops
+
+      // Convert the angle to radians
+      const angleInRadians = angleInDegrees * (Math.PI / 180);
+
+      // Set the position of the sound based on the angle (on the horizontal plane, z=0)
+      const x = Math.cos(angleInRadians);
+      const y = 0;  // Sound will be at ear level, so y = 0
+      const z = Math.sin(angleInRadians);
+
+      panner.setPosition(x, y, z);
+
+      // Create a gain node (optional, for controlling volume)
+      const gainNode = audioContext.createGain();
+      gainNode.gain.value = 1;  // Set volume
+
+      // Connect the nodes: source -> panner -> gain -> destination (speakers/headphones)
+      source.connect(panner);
+      panner.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      // Start playing the sound
+      source.start();
+    }
+
+    document.getElementById('playButton').addEventListener('click', () => {
+      const angle = 45;  // Set the angle to 45 degrees (you can change this)
+      playSpatialAudio(angle);
+    });
+  </script>
+</body>
+</html>
