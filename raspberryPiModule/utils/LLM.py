@@ -24,41 +24,91 @@ allUrls = [
 
 # requires the photos in the assets folder
 def add_lines():
-    images = ["./assets/1.jpg", "./assets/2.jpg", "./assets/3.jpg", "./assets/4.jpg"]
-    # Ensure the "converted" directory exists
-    os.makedirs("converted", exist_ok=True)
+  images = ["./assets/1.jpg", "./assets/2.jpg", "./assets/3.jpg", "./assets/4.jpg"]
+  # Ensure the "converted" directory exists
+  os.makedirs("converted", exist_ok=True)
 
-    line_number = 10  # Start with the first line number as 10
-    for i in range(4):
-        image = cv2.imread(images[i])
-        # Get the height and width of the image
-        height, width = image.shape[:2]
-        # Divide the width by 10
-        step = width // 10
-        # Draw 10 vertical lines and add text
-        for j in range(1, 10):
-            cv2.line(
-                image, (j * step, 0), (j * step, height), (0, 0, 0), 10
-            )  # Thicker and black lines
-            # Add text next to each line
-            cv2.putText(
-                image,
-                str(line_number),
-                (j * step + 5, height // 2),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                2,
-                (0, 0, 0),
-                5,
-                cv2.LINE_AA,
-            )
-            line_number += 10  # Increment the line number by 10 for the next line
-        # Ensure the next image starts with the correct line number
-        line_number += 10  # Skip 10 to start from 110 after 90
-        # Save the image without changing the resolution
-        cv2.imwrite(
-            f"converted/{i + 1}.jpg", image
-        )  # Compress the image with 50% quality
-        # cv2.imwrite(f"converted/{i + 1}.jpg", image, [cv2.IMWRITE_JPEG_QUALITY, 50])  # Compress the image with 50% quality
+  # in the first image add a line in the middle vertically and then addd 3 more to the left and right all divided equall. Mark the line in the middle with 0
+  image = cv2.imread(images[0])
+  # rotate the image 180 degrees
+  image = cv2.rotate(image, cv2.ROTATE_180)
+  # Get the height and width of the image
+  height, width = image.shape[:2]
+  # Divide the width by 7
+  step = width // 7
+  # draw 7 vertical lines
+  text1 = [35, 25, 15, 5, 355, 345]
+  for j in range(1, 7):
+    cv2.line(image, (j * step, 0), (j * step, height), (0, 0, 0), 10)  # Thicker and black lines
+    # Add text next to each line
+    cv2.putText(image, str(text1[j - 1]), (j * step + 5, 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+    cv2.putText(image, str(text1[j - 1]), (j * step + 5, height -50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+  # Save the image without changing the resolution
+    cv2.putText(image, str(45), (5, 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+    cv2.putText(image, str(45), (5, height - 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0),5, cv2.LINE_AA)
+  cv2.imwrite(f"converted/1.jpg", image, [cv2.IMWRITE_JPEG_QUALITY, 50])  # Compress the image with 50% quality
+
+# in the first image add a line in the middle vertically and then addd 3 more to the left and right all divided equall. Mark the line in the middle with 0
+  image = cv2.imread(images[1])
+  # rotate the image 180 degrees
+  image = cv2.rotate(image, cv2.ROTATE_180)
+  # Get the height and width of the image
+  height, width = image.shape[:2]
+  # Divide the width by 7
+  step = width // 7
+  # draw 7 vertical lines
+  text1 = [115, 105, 95, 85, 75, 65]
+  for j in range(1, 7):
+    cv2.line(image, (j * step, 0), (j * step, height), (0, 0, 0), 10)  # Thicker and black lines
+    # Add text next to each line
+    cv2.putText(image, str(text1[j - 1]), (j * step + 5, 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+    cv2.putText(image, str(text1[j - 1]), (j * step + 5, height - 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+  # Save the image without changing the resolution
+    cv2.putText(image, str(125), (5, 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+    cv2.putText(image, str(125), (5, height - 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+  cv2.imwrite(f"converted/2.jpg", image, [cv2.IMWRITE_JPEG_QUALITY, 50])  # Compress the image with 50% quality
+
+
+  # in the first image add a line in the middle vertically and then addd 3 more to the left and right all divided equall. Mark the line in the middle with 0
+  image = cv2.imread(images[2])
+  # rotate the image 180 degrees
+  image = cv2.rotate(image, cv2.ROTATE_180)
+  # Get the height and width of the image
+  height, width = image.shape[:2]
+  # Divide the width by 7
+  step = width // 7
+  # draw 7 vertical lines
+  text1 = [205, 195, 185, 175, 165, 155]
+  for j in range(1, 7):
+    cv2.line(image, (j * step, 0), (j * step, height), (0, 0, 0), 10)  # Thicker and black lines
+    # Add text next to each line
+    cv2.putText(image, str(text1[j - 1]), (j * step + 5, 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+    cv2.putText(image, str(text1[j - 1]), (j * step + 5, height - 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+  # Save the image without changing the resolution
+    cv2.putText(image, str(215), (5, 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+    cv2.putText(image, str(215), (5, height - 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+  cv2.imwrite(f"converted/3.jpg", image, [cv2.IMWRITE_JPEG_QUALITY, 50])  # Compress the image with 50% quality
+
+# in the first image add a line in the middle vertically and then addd 3 more to the left and right all divided equall. Mark the line in the middle with 0
+  image = cv2.imread(images[3])
+  # rotate the image 180 degrees
+  image = cv2.rotate(image, cv2.ROTATE_180)
+  # Get the height and width of the image
+  height, width = image.shape[:2]
+  # Divide the width by 7
+  step = width // 7
+  # draw 7 vertical lines
+  text1 = [295, 285, 275, 265, 255, 245]
+  for j in range(1, 7):
+    cv2.line(image, (j * step, 0), (j * step, height), (0, 0, 0), 10)  # Thicker and black lines
+    # Add text next to each line
+    cv2.putText(image, str(text1[j - 1]), (j * step + 5, 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+    cv2.putText(image, str(text1[j - 1]), (j * step + 5, height - 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+  # Save the image without changing the resolution
+    cv2.putText(image, str(305), (5, 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0),5, cv2.LINE_AA)
+    cv2.putText(image, str(45), (5, height - 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+  cv2.imwrite(f"converted/4.jpg", image, [cv2.IMWRITE_JPEG_QUALITY, 50])  # Compress the image with 50% quality
+
 
 
 def upload_photos():
@@ -83,18 +133,30 @@ def analyze_photos():
                 "content": [
                     {
                         "type": "text",
-                        "text": "Look at all the images, and find which one of the vertical lines contains a door. each line is marked by a number. find the middle of the door. if its not a line, estimate the number that was go over the middle of the door",
+                        "text": "Look at all the images, and find which one of the vertical lines contains a door. each line is marked by a number. find the middle of the door. if its not a line, estimate the number that was go over the middle of the door. Your answer will be used by us os just send the answer and no explaination. Wrap the final answer in {{}} brackets",
                     },
                     {
                         "type": "image_url",
                         "image_url": {
-                            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg",
+                            "url": "https://res.cloudinary.com/djxkc3pxx/image/upload/v1728168103/1.jpg",
                         },
                     },
                     {
                         "type": "image_url",
                         "image_url": {
-                            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg",
+                            "url": "https://res.cloudinary.com/djxkc3pxx/image/upload/v1728168103/2.jpg",
+                        },
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": "https://res.cloudinary.com/djxkc3pxx/image/upload/v1728168103/3.jpg",
+                        },
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": "https://res.cloudinary.com/djxkc3pxx/image/upload/v1728168103/4.jpg",
                         },
                     },
                 ],
@@ -102,7 +164,19 @@ def analyze_photos():
         ],
         max_tokens=300,
     )
-    print(response.choices[0])
+    input_string = response.choices[0]
+    print(input_string)
+    # {{}}
+    start = input_string.find("{{")
+    end = input_string.find("}}")
+    extracted_content = 0
+    if start != -1 and end != -1:
+      extracted_content = input_string[start+2:end]  # +2 to exclude the curly braces
+      print("Extracted content:", extracted_content)
+    else:
+        print("No content found inside curly braces.")
+    return int(extracted_content)
+    
 
 
 def full_flow():
@@ -112,4 +186,4 @@ def full_flow():
 
     add_lines()
     upload_photos()
-    # analyze_photos()
+    return analyze_photos()

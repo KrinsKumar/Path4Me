@@ -1,25 +1,15 @@
 import os
+from utils.h import loop
 import time
-
 import smbus
 from picamera import PiCamera
-
-# MPU6050 Registers
-PWR_MGMT_1 = 0x6B
-GYRO_XOUT_H = 0x43
-GYRO_YOUT_H = 0x45
-GYRO_ZOUT_H = 0x47
-
-bus = smbus.SMBus(1)  # Open the I2C bus
-address = 0x68  # MPU-6050 address
+import math
+from utils.sound import update_volume
+import subprocess
 
 image_folder = "assets"  # The folder with the images
 if not os.path.exists(image_folder):
     os.makedirs(image_folder)
-
-# Wake up MPU6050
-bus.write_byte_data(address, PWR_MGMT_1, 0)
-
 
 def take_picture(num, val):
     # Initialize PiCamera
@@ -30,12 +20,13 @@ def take_picture(num, val):
     image_path = os.path.join(image_folder, image_name)
 
     # Start the camera preview (optional)
+    subprocess.run(["mpg123", "utils/notif.mp3"])
     camera.start_preview()
-    time.sleep(1)  # Give the camera time to adjust to lighting
+    time.sleep(0.5)  # Give the camera time to adjust to lighting
 
     # Capture the image
     camera.capture(image_path)
-
+    
     # Stop the camera preview (optional)
     camera.stop_preview()
 
@@ -43,7 +34,6 @@ def take_picture(num, val):
     camera.close()
 
     print(f"Image saved at {image_path} at gyro value of {val}")
-
 
 def read_word(reg):
     high = bus.read_byte_data(address, reg)
@@ -53,13 +43,17 @@ def read_word(reg):
         value = -(65535 - value + 1)
     return value
 
+def read_accelerometer():
+    accel_x = read_word(ACCEL_XOUT_H)
+    accel_y = read_word(ACCEL_YOUT_H)
+    accel_z = read_word(ACCEL_ZOUT_H)
+    return accel_x, accel_y, accel_z
 
 def read_gyroscope():
     gyro_x = read_word(GYRO_XOUT_H)
     gyro_y = read_word(GYRO_YOUT_H)
     gyro_z = read_word(GYRO_ZOUT_H)
     return gyro_x, gyro_y, gyro_z
-
 
 def calibrate_gyroscope(samples=100):
     offset_x = 0
@@ -78,7 +72,6 @@ def calibrate_gyroscope(samples=100):
     offset_z /= samples
 
     return offset_x, offset_y, offset_z
-
 
 def fetch_sensor_data():
     print("\n--------------------------------")
@@ -102,15 +95,21 @@ def fetch_sensor_data():
 
     prev_time = time.time()
 
-    # Step 2: Read live data and apply calibration
-    print("Reading live gyroscope data and wrapping Z-axis to 0-360 degrees...")
+    # Complementary filter constant
+    alpha = 0.98
 
-    while not pictures_taken[2]:
+    # Step 2: Read live data and apply calibration
+    print("Reading live gyroscope data and wrapping Y-axis to 0-360 degrees...")
+
+    while True:
         # Read gyroscope data and subtract offsets
         gyro_x, gyro_y, gyro_z = read_gyroscope()
         calibrated_gyro_x = gyro_x - gyro_offset_x
         calibrated_gyro_y = gyro_y - gyro_offset_y
         calibrated_gyro_z = gyro_z - gyro_offset_z
+
+        # Read accelerometer data
+        accel_x, accel_y, accel_z = read_accelerometer()
 
         # Calculate time difference (dt)
         current_time = time.time()
@@ -118,27 +117,32 @@ def fetch_sensor_data():
         prev_time = current_time
 
         # Convert gyroscope values to angular displacement (in degrees)
-        # Sensitivity is usually 131 LSB per degree/s for the MPU-6050 by default
         gyro_sensitivity = 131.0
         angle_x += (calibrated_gyro_x / gyro_sensitivity) * dt
         angle_y += (calibrated_gyro_y / gyro_sensitivity) * dt
         angle_z += (calibrated_gyro_z / gyro_sensitivity) * dt
 
-        # Wrap the Z-axis angle (yaw) to stay within 0-360 degrees
-        angle_z = angle_z % 360  # Ensures angle stays between 0 and 360
+        # Calculate accelerometer angles
+        accel_angle_x = math.atan2(accel_y, accel_z) * 180 / math.pi
+        accel_angle_y = math.atan2(-accel_x, math.sqrt(accel_y**2 + accel_z**2)) * 180 / math.pi
 
-        if angle_z > 50 and not pictures_taken[0]:
-            take_picture(2, angle_z)
+        # Apply complementary filter
+        angle_x = alpha * angle_x + (1 - alpha) * accel_angle_x
+        angle_y = alpha * angle_y + (1 - alpha) * accel_angle_y
+
+        # Wrap the Y-axis angle to stay within 0-360 degrees
+        angle_y = angle_y % 360  # Ensures angle stays between 0 and 360
+
+        if angle_y > 88 and angle_y < 92 and not pictures_taken[0]:
+            take_picture(2, angle_y)
             pictures_taken[0] = True
-        elif angle_z > 140 and not pictures_taken[1] and pictures_taken[0]:
-            take_picture(3, angle_z)
+        elif angle_y > 178 and angle_y < 182 and not pictures_taken[1] and pictures_taken[0]:
+            take_picture(3, angle_y)
             pictures_taken[1] = True
-        elif angle_z > 230 and not pictures_taken[2] and pictures_taken[1]:
-            take_picture(4, angle_z)
+        elif angle_y > 268 and angle_y < 272 and not pictures_taken[2] and pictures_taken[1]:
+            take_picture(4, angle_y)
             pictures_taken[2] = True
+            break
 
-        # Print the live angle values (with Z-axis wrapped)
+        # Print the live angle values (with Y-axis wrapped)
         print(f"Angles (X: {angle_x:.2f}, Y: {angle_y:.2f}, Z: {angle_z:.2f})")
-
-        # Small delay to avoid flooding the console
-        time.sleep(0.5)
