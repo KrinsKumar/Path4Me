@@ -28,11 +28,15 @@ right_volume = 1
 start_index = 0
 beep = False
 
-def update_volume(angle, beep_val=False):
+def update_volume(angle, beep_val=False, general_volume=1):
     global left_volume, right_volume, beep
 
-    left_volume = math.fabs(math.sin(math.radians(angle)))
-    right_volume = math.fabs(math.cos(math.radians(angle)))
+    if(general_volume):
+        left_volume = math.fabs(math.sin(math.radians(angle)))
+        right_volume = math.fabs(math.cos(math.radians(angle)))
+    else:
+        left_volume = 0
+        right_volume = 0
     beep = beep_val
 
 def create_sound():

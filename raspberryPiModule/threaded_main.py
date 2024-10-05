@@ -5,6 +5,9 @@ import threading
 import math
 import time # For testing purposes
 
+t3 = threading.Thread(target=create_sound)
+t3.start()
+
 fetch_sensor_data() #Image capture
 #target_degrees = full_flow() # Image analysis
 target_degrees = 225
@@ -78,14 +81,14 @@ def call_sound_generator():
 
 t1 = threading.Thread(target=capture_gyro_data)
 t2 = threading.Thread(target=call_sound_generator)
-t3 = threading.Thread(target=create_sound)
 
+
+t3.join()
 if __name__ == "__main__":
     t1.start()
     t2.start()
-    t3.start()
+    
 
     t1.join()
-    t2.join()
-    t3.join()
+    t2.join()   
             
