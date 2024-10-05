@@ -1,6 +1,7 @@
 #from utils.LLM import full_flow
-from utils.sensors import fetch_sensor_data, calibrate_gyroscope, read_gyroscope
+from utils.sensors import fetch_sensor_data, calibrate_gyroscope, read_gyroscope, read_accelerometer
 import threading
+import math
 import time # For testing purposes
 
 fetch_sensor_data() #Image capture
@@ -26,6 +27,8 @@ def capture_gyro_data():
         calibrated_gyro_y = gyro_y - gyro_offset_y
         calibrated_gyro_z = gyro_z - gyro_offset_z
 
+        accel_x, accel_y, accel_z = read_accelerometer()
+
         current_time = time.time()
         dt = current_time - prev_time
         prev_time = current_time
@@ -34,6 +37,12 @@ def capture_gyro_data():
         angle_x += (calibrated_gyro_x / gyro_sensitivity) * dt
         angle_y += (calibrated_gyro_y / gyro_sensitivity) * dt
         angle_z += (calibrated_gyro_z / gyro_sensitivity) * dt
+
+        accel_angle_x = math.atan2(accel_y, accel_z) * 180 / math.pi
+        accel_angle_y = math.atan2(-accel_x, math.sqrt(accel_y**2 + accel_z**2)) * 180 / math.pi
+
+        angle_x = alpha * angle_x + (1 - alpha) * accel_angle_x
+        angle_y = alpha * angle_y + (1 - alpha) * accel_angle_y
 
         angle_z = angle_z % 360
 
