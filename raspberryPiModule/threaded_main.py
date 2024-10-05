@@ -5,7 +5,7 @@ import threading
 import math
 import time # For testing purposes
 
-fetch_sensor_data() #Image capture
+#fetch_sensor_data() #Image capture
 #target_degrees = full_flow() # Image analysis
 target_degrees = 220
 
