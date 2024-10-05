@@ -284,7 +284,7 @@ def fetch_sensor_data():
     alpha = 0.98
 
     # Step 2: Read live data and apply calibration
-    print("Reading live gyroscope data and wrapping X-axis to 0-360 degrees...")
+    print("Reading live gyroscope data and wrapping Y-axis to 0-360 degrees...")
 
     while True:
         # Read gyroscope data and subtract offsets
@@ -315,7 +315,7 @@ def fetch_sensor_data():
         angle_x = alpha * angle_x + (1 - alpha) * accel_angle_x
         angle_y = alpha * angle_y + (1 - alpha) * accel_angle_y
 
-        # Wrap the X-axis angle to stay within 0-360 degrees
+        # Wrap the Y-axis angle to stay within 0-360 degrees
         angle_y = angle_y % 360  # Ensures angle stays between 0 and 360
 
         if angle_y > 88 and angle_y < 92 and not pictures_taken[0]:
@@ -329,5 +329,5 @@ def fetch_sensor_data():
             pictures_taken[2] = True
             break
 
-        # Print the live angle values (with X-axis wrapped)
+        # Print the live angle values (with Y-axis wrapped)
         print(f"Angles (X: {angle_x:.2f}, Y: {angle_y:.2f}, Z: {angle_z:.2f})")
