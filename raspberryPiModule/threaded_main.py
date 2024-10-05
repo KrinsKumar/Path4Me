@@ -59,6 +59,8 @@ def call_sound_generator():
         a1 = abs(gyro_degrees - target_degrees)
         a2 = 360 - a1
 
+        print(f"Sound emmited for gyro: {gyro_degrees} | target: {target_degrees}")
+
         if a1 > 90 and a2 > 90:
             create_sound(135, True)
             continue
@@ -73,7 +75,6 @@ def call_sound_generator():
         else:
             create_sound(135 - A/2)
 
-        time.sleep(0.05)
 
 t1 = threading.Thread(target=capture_gyro_data)
 t2 = threading.Thread(target=call_sound_generator)
