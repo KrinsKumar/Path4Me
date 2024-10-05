@@ -23,42 +23,51 @@ stream = p.open(format=pyaudio.paFloat32,
                 output=True)
 
 
+left_volume = 1
+right_volume = 1
 start_index = 0
-def create_sound(angle, beep=False):
-    global start_index
+beep = False
+
+def update_volume(angle, beep_val=False):
+    global left_volume, right_volume, beep
 
     left_volume = math.fabs(math.sin(math.radians(angle)))
     right_volume = math.fabs(math.cos(math.radians(angle)))
+    beep = beep_val
 
-    # Calculate the end index for the current chunk
-    end_index = start_index + chunk_size
+def create_sound():
+    global start_index, left_volume, right_volume, beep
 
-    # Check if we need to wrap around to the beginning of the waveform
-    if end_index > len(waveform):
-        chunk = np.concatenate((waveform[start_index:], waveform[:end_index % len(waveform)]))
-    else:
-        chunk = waveform[start_index:end_index]
+    while True:
+        # Calculate the end index for the current chunk
+        end_index = start_index + chunk_size
 
-    # Create the stereo chunk
-    stereo_chunk = np.zeros((len(chunk), 2))
-    stereo_chunk[:, 0] = left_volume * chunk  # Left channel
-    stereo_chunk[:, 1] = right_volume * chunk  # Right channel
+        # Check if we need to wrap around to the beginning of the waveform
+        if end_index > len(waveform):
+            chunk = np.concatenate((waveform[start_index:], waveform[:end_index % len(waveform)]))
+        else:
+            chunk = waveform[start_index:end_index]
 
-    # Write the chunk to the audio stream
-    stream.write(stereo_chunk.astype(np.float32).tobytes())
+        # Create the stereo chunk
+        stereo_chunk = np.zeros((len(chunk), 2))
+        stereo_chunk[:, 0] = left_volume * chunk  # Left channel
+        stereo_chunk[:, 1] = right_volume * chunk  # Right channel
 
-    # Move to the next chunk
-    start_index = end_index % len(waveform)
+        # Write the chunk to the audio stream
+        stream.write(stereo_chunk.astype(np.float32).tobytes())
 
-    if(beep):
-        stream.stop_stream()
-        time.sleep(0.5)
-        stream.start_stream()
+        # Move to the next chunk
+        start_index = end_index % len(waveform)
+
+        if(beep):
+            stream.stop_stream()
+            time.sleep(0.5)
+            stream.start_stream()
 
 if __name__ == "__main__":
     # Play the sound
     while True:
-        create_sound(135, True)
+        create_sound()
 
     # Close the stream and terminate PyAudio
     stream.stop_stream()

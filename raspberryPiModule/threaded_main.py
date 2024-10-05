@@ -1,6 +1,6 @@
 #from utils.LLM import full_flow
 from utils.sensors import fetch_sensor_data, calibrate_gyroscope, read_gyroscope, read_accelerometer
-from utils.sound import create_sound
+from utils.sound import create_sound, update_volume
 import threading
 import math
 import time # For testing purposes
@@ -62,27 +62,30 @@ def call_sound_generator():
         print(f"Sound emmited for gyro: {gyro_degrees} | target: {target_degrees}")
 
         if a1 > 90 and a2 > 90:
-            create_sound(135, True)
+            update_volume(135, True)
             continue
         
         A = target_degrees - gyro_degrees
         if A > 180 or A < -180:
             B = 360 - abs(A)
             if target_degrees > gyro_degrees:
-                create_sound(135 + B/2)
+                update_volume(135 + B/2)
             else:
-                create_sound(135 - B/2)
+                update_volume(135 - B/2)
         else:
-            create_sound(135 - A/2)
+            update_volume(135 - A/2)
 
 
 t1 = threading.Thread(target=capture_gyro_data)
 t2 = threading.Thread(target=call_sound_generator)
+t3 = threading.Thread(target=create_sound)
 
 if __name__ == "__main__":
     t1.start()
     t2.start()
+    t3.start()
 
     t1.join()
     t2.join()
+    t3.join()
             
