@@ -106,6 +106,10 @@ def analyze_photos():
 
 
 def full_flow():
+    print("\n--------------------------------")
+    print("Sending the images for analysis...")
+    print("--------------------------------\n")
+
     add_lines()
     upload_photos()
     # analyze_photos()

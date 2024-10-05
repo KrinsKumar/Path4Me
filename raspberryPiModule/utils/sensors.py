@@ -81,6 +81,10 @@ def calibrate_gyroscope(samples=100):
 
 
 def fetch_sensor_data():
+    print("\n--------------------------------")
+    print("Fetching sensor data...")
+    print("--------------------------------\n")
+
     # Step 1: Calibrate the gyroscope
     print("Calibrating gyroscope... Please keep the sensor still.")
     gyro_offset_x, gyro_offset_y, gyro_offset_z = calibrate_gyroscope()
@@ -138,7 +142,3 @@ def fetch_sensor_data():
 
         # Small delay to avoid flooding the console
         time.sleep(0.5)
-
-    print("\n--------------------------------")
-    print("Sending the images for analysis...")
-    print("--------------------------------")

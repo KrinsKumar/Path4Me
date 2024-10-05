@@ -4,3 +4,4 @@ from utils.sensors import fetch_sensor_data
 # Run all the functions sequentially
 fetch_sensor_data()
 full_flow()
+print("All functions executed successfully!")
