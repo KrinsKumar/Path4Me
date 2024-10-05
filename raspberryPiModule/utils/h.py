@@ -100,7 +100,7 @@ def loop(gyro_offsets):
             elif current_angle_x > 235 and current_angle_x < 272 and not pictures_taken[2] and pictures_taken[1]:
                 take_picture(4, current_angle_x)
                 pictures_taken[2] = True
-            elif pictures_taken[3] and (current_angle < 5 or current_angle > 355):
+            elif pictures_taken[2] and (current_angle < 5 or current_angle > 355):
                 break
 
             # Print the data to the console
