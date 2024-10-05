@@ -52,3 +52,13 @@ def create_sound(angle, beep=False):
 
     if(beep):
         time.sleep(0.3)
+
+if __name__ == "__main__":
+    # Play the sound
+    while True:
+        create_sound(135, True)
+        
+    # Close the stream and terminate PyAudio
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
