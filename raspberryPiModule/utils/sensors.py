@@ -153,13 +153,13 @@ def fetch_sensor_data():
         # Wrap the Z-axis angle (yaw) to stay within 0-360 degrees
         angle_z = angle_z % 360  # Ensures angle stays between 0 and 360
 
-        if angle_z > 85 and angle_z < 95 and not pictures_taken[0]:
+        if angle_z > 80 and angle_z < 100 and not pictures_taken[0]:
             take_picture(2, angle_z)
             pictures_taken[0] = True
-        elif angle_z > 175 and angle_z < 185 and not pictures_taken[1] and pictures_taken[0]:
+        elif angle_z > 170 and angle_z < 190 and not pictures_taken[1] and pictures_taken[0]:
             take_picture(3, angle_z)
             pictures_taken[1] = True
-        elif angle_z > 265 and angle_z < 275 and not pictures_taken[2] and pictures_taken[1]:
+        elif angle_z > 260 and angle_z < 280 and not pictures_taken[2] and pictures_taken[1]:
             take_picture(4, angle_z)
             pictures_taken[2] = True
             break
