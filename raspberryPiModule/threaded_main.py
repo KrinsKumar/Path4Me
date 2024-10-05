@@ -11,7 +11,6 @@ import time # For testing purposes
 target_degrees = 225
 
 gyro_degrees = 0
-gyro_lock = threading.Lock()
 
 
 def low_pass_filter(value, prev_value, alpha=0.5):
@@ -65,34 +64,33 @@ def capture_gyro_data():
         angle_x = alpha * angle_x + (1 - alpha) * accel_angle_x
         angle_y = alpha * angle_y + (1 - alpha) * accel_angle_y
 
-        # Comment out the angle wrapping
-        # angle_y = angle_y % 360
+        angle_x = angle_x % 360
 
-        with gyro_lock:
-            gyro_degrees = angle_y
-
+        gyro_degrees = angle_x
 
 def call_sound_generator():
     global gyro_degrees
     global target_degrees
 
     while True:
-        with gyro_lock:
-            current_gyro_degrees = gyro_degrees
-        a1 = abs(gyro_degrees % 360 - target_degrees % 360)
+        a1 = abs(gyro_degrees - target_degrees)
         a2 = 360 - a1
 
-        print(f"Sound emitted for gyro: {gyro_degrees} | target: {target_degrees}")
+        print(f"Sound emmited for gyro: {gyro_degrees} | target: {target_degrees}")
 
         if a1 > 90 and a2 > 90:
             update_volume(135, True)
             continue
-
-        A = (target_degrees - gyro_degrees) % 360
-        if A > 180:
-            A -= 360
         
-        update_volume(135 - A / 2)
+        A = target_degrees - gyro_degrees
+        if A > 180 or A < -180:
+            B = 360 - abs(A)
+            if target_degrees > gyro_degrees:
+                update_volume(135 + B/2)
+            else:
+                update_volume(135 - B/2)
+        else:
+            update_volume(135 - A/2)
 
 
 t1 = threading.Thread(target=capture_gyro_data)
