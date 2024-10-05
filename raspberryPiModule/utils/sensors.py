@@ -316,16 +316,16 @@ def fetch_sensor_data():
         angle_y = alpha * angle_y + (1 - alpha) * accel_angle_y
 
         # Wrap the X-axis angle to stay within 0-360 degrees
-        angle_x = angle_x % 360  # Ensures angle stays between 0 and 360
+        angle_y = angle_y % 360  # Ensures angle stays between 0 and 360
 
-        if angle_x > 88 and angle_x < 92 and not pictures_taken[0]:
-            take_picture(2, angle_x)
+        if angle_y > 88 and angle_y < 92 and not pictures_taken[0]:
+            take_picture(2, angle_y)
             pictures_taken[0] = True
-        elif angle_x > 178 and angle_x < 182 and not pictures_taken[1] and pictures_taken[0]:
-            take_picture(3, angle_x)
+        elif angle_y > 178 and angle_y < 182 and not pictures_taken[1] and pictures_taken[0]:
+            take_picture(3, angle_y)
             pictures_taken[1] = True
-        elif angle_x > 268 and angle_x < 272 and not pictures_taken[2] and pictures_taken[1]:
-            take_picture(4, angle_x)
+        elif angle_y > 268 and angle_y < 272 and not pictures_taken[2] and pictures_taken[1]:
+            take_picture(4, angle_y)
             pictures_taken[2] = True
             break
 
