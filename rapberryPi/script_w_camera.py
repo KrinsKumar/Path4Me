@@ -2,6 +2,7 @@ import time
 import os
 from picamera import PiCamera
 import smbus
+from angleA.photo import full_flow
 
 # MPU6050 Registers
 PWR_MGMT_1 = 0x6B
@@ -24,7 +25,7 @@ def take_picture(num, val):
     camera = PiCamera()
 
     # Capture image
-    image_name = f"image_{num}.jpg"  # Unique name based on timestamp
+    image_name = f"{num}.jpg"  # Unique name based on timestamp
     image_path = os.path.join(image_folder, image_name)
 
     # Start the camera preview (optional)
@@ -97,7 +98,7 @@ prev_time = time.time()
 # Step 2: Read live data and apply calibration
 print("Reading live gyroscope data and wrapping Z-axis to 0-360 degrees...")
 
-while True:
+while not pictures_taken[2]:
     # Read gyroscope data and subtract offsets
     gyro_x, gyro_y, gyro_z = read_gyroscope()
     calibrated_gyro_x = gyro_x - gyro_offset_x
@@ -135,4 +136,8 @@ while True:
     # Small delay to avoid flooding the console
     time.sleep(0.5)
 
+print("\n--------------------------------")
+print("Sending the images for analysis...")
+print("--------------------------------")
 
+full_flow()
