@@ -1,6 +1,15 @@
 {
+  "name": "hack-the-valley",
+  "version": "1.0.0",
+  "description": "",
+  "main": "d.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "node-web-audio-api": "^0.21.2",
-    "speaker": "^0.5.5"
+    "node-web-audio-api": "^0.21.2"
   }
 }
