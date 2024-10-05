@@ -6,8 +6,8 @@ import math
 import time # For testing purposes
 
 
-fetch_sensor_data() #Image capture
-target_degrees = full_flow() # Image analysis
+#fetch_sensor_data() #Image capture
+#target_degrees = full_flow() # Image analysis
 target_degrees = 225
 
 gyro_degrees = 0
@@ -48,9 +48,9 @@ def capture_gyro_data():
         angle_x = alpha * angle_x + (1 - alpha) * accel_angle_x
         angle_y = alpha * angle_y + (1 - alpha) * accel_angle_y
 
-        angle_z = angle_z % 360
+        angle_y = angle_y % 360
 
-        gyro_degrees = angle_z
+        gyro_degrees = angle_y
 
 def call_sound_generator():
     global gyro_degrees
