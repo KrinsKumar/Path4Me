@@ -6,6 +6,7 @@ from utils.LLM import full_flow
 from utils.sensor import loop
 from utils.sound import create_sound, update_volume
 import subprocess
+import os
 
 mpu = mpu6050(0x68)
 
