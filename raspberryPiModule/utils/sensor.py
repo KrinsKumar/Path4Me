@@ -76,8 +76,8 @@ def loop(gyro_offsets):
     pictures_taken[0] = True
 
     sound_file = os.path.join("utils","assets", "start.mp3")
-      if os.path.exists(sound_file):
-          subprocess.run(["mpg123", sound_file])
+    if os.path.exists(sound_file):
+        subprocess.run(["mpg123", sound_file])
 
     prev_time = time.time()
     prev_gyro_x = 0.0
