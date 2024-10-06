@@ -1,161 +1,90 @@
-# import numpy as np
-# import pyaudio
-# import math
-# import time
-
-# # Parameters
-# duration = 1  # seconds
-# sampling_rate = 44100  # samples per second (standard for audio)
-# frequency = 220.0  # frequency of the sound (A4)
-# chunk_size = 1024  # Smaller chunks of data to process per iteration
-
-# # Generate the waveform for the entire duration
-# t = np.linspace(0, duration, int(sampling_rate * duration), endpoint=False)
-# waveform = np.sin(2 * np.pi * frequency * t)
-
-# # Initialize PyAudio
-# p = pyaudio.PyAudio()
-
-# # Open a stream for stereo output
-# stream = p.open(format=pyaudio.paFloat32,
-#                 channels=2,  # Stereo (left and right channels)
-#                 rate=sampling_rate,
-#                 output=True)
-
-
-# left_volume = 1
-# right_volume = 1
-# start_index = 0
-# beep = False
-
-# def update_volume(angle, beep_val=False):
-#     global left_volume, right_volume, beep
-
-#     left_volume = math.fabs(math.sin(math.radians(angle)))
-#     right_volume = math.fabs(math.cos(math.radians(angle)))
-
-#     beep = beep_val
-
-# def create_sound():
-#     global start_index, left_volume, right_volume, beep
-
-#     while True:
-#         # Calculate the end index for the current chunk
-#         end_index = start_index + chunk_size
-
-#         # Check if we need to wrap around to the beginning of the waveform
-#         if end_index > len(waveform):
-#             chunk = np.concatenate((waveform[start_index:], waveform[:end_index % len(waveform)]))
-#         else:
-#             chunk = waveform[start_index:end_index]
-
-#         # Create the stereo chunk
-#         stereo_chunk = np.zeros((len(chunk), 2))
-#         stereo_chunk[:, 0] = left_volume * chunk  # Left channel
-#         stereo_chunk[:, 1] = right_volume * chunk  # Right channel
-
-#         # Write the chunk to the audio stream
-#         stream.write(stereo_chunk.astype(np.float32).tobytes())
-
-#         # Move to the next chunk
-#         start_index = end_index % len(waveform)
-
-#         if(beep):
-#             stream.stop_stream()
-#             time.sleep(0.5)
-#             stream.start_stream()
-
-# if __name__ == "__main__":
-#     # Play the sound
-#     while True:
-#         create_sound()
-
-#     # Close the stream and terminate PyAudio
-#     stream.stop_stream()
-#     stream.close()
-#     p.terminate()
-
-import math
-import time
-import wave
-
 import numpy as np
 import pyaudio
+import math
+import time
 
-# Path to your .wav file
-audio_file_path = "./utils/music.wav"
+# Parameters
+duration = 1  # seconds
+sampling_rate = 11050  # samples per second (standard for audio)
+frequency = 220.0  # frequency of the sound (A4)
+chunk_size = 8096  # Increased chunk size to reduce underrun errors
+current_byte = 0
 
-# Open the .wav file
-wav_file = wave.open(audio_file_path, 'rb')
+# Generate the waveform for the entire duration
+t = np.linspace(0, duration, int(sampling_rate * duration), endpoint=False)
+waveform = (np.sin(2 * np.pi * frequency * t) * 1.5).astype(np.int16)
 
-# Setup PyAudio
+# Initialize PyAudio
 p = pyaudio.PyAudio()
-stream = p.open(format=p.get_format_from_width(wav_file.getsampwidth()),
-                channels=wav_file.getnchannels(),
-                rate=wav_file.getframerate(),
+
+# Open a stream for stereo output
+stream = p.open(format=pyaudio.paFloat32,
+                channels=2,  # Stereo (left and right channels)
+                rate=sampling_rate,
                 output=True)
 
-# Read the .wav file in chunks
-chunk_size = 1024
-
-# Initialize volume control
 left_volume = 1
 right_volume = 1
 start_index = 0
+end_index = 0
 beep = False
 
 def update_volume(angle, beep_val=False):
+    """Update the stereo volumes based on angle input (in degrees)."""
     global left_volume, right_volume, beep
-
-    left_volume = math.fabs(math.sin(math.radians(angle)))
-    right_volume = math.fabs(math.cos(math.radians(angle)))
-
+    left_volume = math.fabs(math.sin(math.radians(angle))) / 10
+    right_volume = math.fabs(math.cos(math.radians(angle))) / 10
     beep = beep_val
+    
+def create_stereo_chunk(chunk, left_vol, right_vol):
+    """Create stereo audio chunk by applying left and right volume."""
+    stereo_chunk = np.zeros((len(chunk), 2))
+    stereo_chunk[:, 0] = left_vol * chunk  # Left channel
+    stereo_chunk[:, 1] = right_vol * chunk  # Right channel
+    return stereo_chunk
 
 def create_sound():
-    global left_volume, right_volume, beep
+    """Continuously generate and play sound with real-time volume updates."""
+    global start_index, waveform, beep
 
-    # Read the .wav file in chunks
-    data = wav_file.readframes(chunk_size)
-    angle=0
-    while data:
-        angle+=0.2
-        angle%=360
-        update_volume(angle)
-        # Convert binary data to numpy array for manipulation
-        chunk = np.frombuffer(data, dtype=np.int16).copy()  # Make the array writable
+    while True:
+        # Calculate end index for the chunk
+        end_index = (start_index + chunk_size) % len(waveform)
 
-        # Reshape into stereo (2 channels)
-        stereo_chunk = chunk.reshape((-1, 2))
+        # Fetch the next chunk from the waveform
+        if end_index > start_index:
+            chunk = waveform[start_index:end_index]
+        else:
+            chunk = np.concatenate((waveform[start_index:], waveform[:end_index]))
 
-        # Adjust the stereo volume for left and right channels
-        stereo_chunk[:, 0] = left_volume * stereo_chunk[:, 0]  # Left channel
-        stereo_chunk[:, 1] = right_volume * stereo_chunk[:, 1]  # Right channel
+        # Create stereo chunk with current volume levels
+        stereo_chunk = create_stereo_chunk(chunk, left_volume, right_volume)
 
-        # Write the modified chunk to the audio stream
-        stream.write(stereo_chunk.astype(np.int16).tobytes())
+        # Write the stereo chunk to the audio stream
+        try:
+            stream.write(stereo_chunk.astype(np.float32).tobytes())
+        except IOError as e:
+            print(f"Stream write error: {e}")
 
-        # Read the next chunk of data from the .wav file
-        data = wav_file.readframes(chunk_size)
+        # Update start index for the next chunk
+        start_index = end_index
 
+        # Optional beep functionality
+        stream.stop_stream()
         if beep:
-            stream.stop_stream()
             time.sleep(0.5)
-            stream.start_stream()
-
+            beep = False
+        else:
+            time.sleep(0.2)
+        stream.start_stream()
 
 if __name__ == "__main__":
-    angle=0
     try:
-        # Play the sound with spatial navigation
-        while True:
-            angle+=1
-            angle%=360
-            create_sound()
-
+        # Play the sound
+        update_volume(167)
+        create_sound()
     finally:
-        # Clean up resources
+        # Close the stream and terminate PyAudio
         stream.stop_stream()
         stream.close()
         p.terminate()
-        wav_file.close()

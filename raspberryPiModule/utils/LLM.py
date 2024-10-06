@@ -46,7 +46,7 @@ def add_lines():
   # Save the image without changing the resolution
     cv2.putText(image, str(45), (5, 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
     cv2.putText(image, str(45), (5, height - 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0),5, cv2.LINE_AA)
-  cv2.imwrite(f"converted/1.jpg", image, [cv2.IMWRITE_JPEG_QUALITY, 50])  # Compress the image with 50% quality
+  cv2.imwrite("converted/1.jpg", image, [cv2.IMWRITE_JPEG_QUALITY, 50])  # Compress the image with 50% quality
 
 # in the first image add a line in the middle vertically and then addd 3 more to the left and right all divided equall. Mark the line in the middle with 0
   image = cv2.imread(images[1])
@@ -66,7 +66,7 @@ def add_lines():
   # Save the image without changing the resolution
     cv2.putText(image, str(125), (5, 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
     cv2.putText(image, str(125), (5, height - 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
-  cv2.imwrite(f"converted/2.jpg", image, [cv2.IMWRITE_JPEG_QUALITY, 50])  # Compress the image with 50% quality
+  cv2.imwrite("converted/2.jpg", image, [cv2.IMWRITE_JPEG_QUALITY, 50])  # Compress the image with 50% quality
 
 
   # in the first image add a line in the middle vertically and then addd 3 more to the left and right all divided equall. Mark the line in the middle with 0
@@ -87,7 +87,7 @@ def add_lines():
   # Save the image without changing the resolution
     cv2.putText(image, str(215), (5, 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
     cv2.putText(image, str(215), (5, height - 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
-  cv2.imwrite(f"converted/3.jpg", image, [cv2.IMWRITE_JPEG_QUALITY, 50])  # Compress the image with 50% quality
+  cv2.imwrite("converted/3.jpg", image, [cv2.IMWRITE_JPEG_QUALITY, 50])  # Compress the image with 50% quality
 
 # in the first image add a line in the middle vertically and then addd 3 more to the left and right all divided equall. Mark the line in the middle with 0
   image = cv2.imread(images[3])
@@ -107,7 +107,7 @@ def add_lines():
   # Save the image without changing the resolution
     cv2.putText(image, str(305), (5, 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0),5, cv2.LINE_AA)
     cv2.putText(image, str(45), (5, height - 200), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
-  cv2.imwrite(f"converted/4.jpg", image, [cv2.IMWRITE_JPEG_QUALITY, 50])  # Compress the image with 50% quality
+  cv2.imwrite("converted/4.jpg", image, [cv2.IMWRITE_JPEG_QUALITY, 50])  # Compress the image with 50% quality
 
 
 

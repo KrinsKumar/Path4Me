@@ -209,3 +209,7 @@ temp/
 *.tar.gz
 package-lock.json  
 yarn.lock          
+
+
+# Custom Files
+converted/
