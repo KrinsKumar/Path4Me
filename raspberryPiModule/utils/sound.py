@@ -7,7 +7,7 @@ import time
 duration = 1  # seconds
 sampling_rate = 11050  # samples per second (standard for audio)
 frequency = 220.0  # frequency of the sound (A4)
-chunk_size = 1024  # Increased chunk size to reduce underrun errors
+chunk_size = 8096  # Increased chunk size to reduce underrun errors
 current_byte = 0
 
 # Generate the waveform for the entire duration
@@ -78,6 +78,9 @@ def create_sound():
         stream.stop_stream()
         if beep:
             time.sleep(0.5)
+            beep = False
+        else:
+            time.sleep(0.2)
         stream.start_stream()
 
 if __name__ == "__main__":
