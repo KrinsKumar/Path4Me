@@ -41,7 +41,7 @@ setup()
 gyro_offsets = calibrate_gyro()
 
 #loop(gyro_offsets) #Image capture
-target_degrees = 220 #full_flow() or 220
+target_degrees = 40 #full_flow() or 220
 gyro_degrees = 0
 
 
