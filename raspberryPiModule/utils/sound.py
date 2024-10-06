@@ -29,12 +29,17 @@ start_index = 0
 end_index = 0
 beep = False
 
-def update_volume(angle, beep_val=False):
+def update_volume(angle, beep_val=False, noVolume=False):
     """Update the stereo volumes based on angle input (in degrees)."""
     global left_volume, right_volume, beep
-    left_volume = math.fabs(math.sin(math.radians(angle))) / 10
-    right_volume = math.fabs(math.cos(math.radians(angle))) / 10
-    beep = beep_val
+    if(noVolume):
+        left_volume = 0
+        right_volume = 0
+        beep = beep_val
+    else:
+        left_volume = math.fabs(math.sin(math.radians(angle))) / 10
+        right_volume = math.fabs(math.cos(math.radians(angle))) / 10
+        beep = beep_val
     
 def create_stereo_chunk(chunk, left_vol, right_vol):
     """Create stereo audio chunk by applying left and right volume."""

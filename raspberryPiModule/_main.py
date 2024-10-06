@@ -33,6 +33,7 @@ def calibrate_gyro():
 
 def setup():
     print("Initializing MPU6050...")
+    subprocess.run(["amixer", "sset", "'Master'", f"70%"])
     time.sleep(1)
     print("MPU6050 ready.")
 
@@ -91,7 +92,7 @@ def call_sound_generator():
         print(f"Sound emmited for gyro: {gyro_degrees} | target: {target_degrees}")
 
         if a1 > 90 and a2 > 90:
-            update_volume(135, False)  # Beep is always False
+            update_volume(135, False, True)  # No volume
             continue
 
         A = target_degrees - gyro_degrees
