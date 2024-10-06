@@ -14,8 +14,11 @@ mpu = mpu6050(0x68)
 
 def setup():
     print("Initializing MPU6050...")
+    subprocess.run(["amixer", "sset", "'Master'", f"40%"])
     time.sleep(1)
     print("MPU6050 ready.")
+
+
 
 
 def take_picture(num, val):
