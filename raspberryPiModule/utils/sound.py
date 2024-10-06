@@ -7,7 +7,7 @@ import time
 duration = 1  # seconds
 sampling_rate = 44100  # samples per second (standard for audio)
 frequency = 220.0  # frequency of the sound (A4)
-chunk_size = 8192  # Increased chunk size to reduce underrun errors
+chunk_size = 1024  # Increased chunk size to reduce underrun errors
 current_byte = 0
 
 # Generate the waveform for the entire duration
@@ -21,8 +21,7 @@ p = pyaudio.PyAudio()
 stream = p.open(format=pyaudio.paFloat32,
                 channels=2,  # Stereo (left and right channels)
                 rate=sampling_rate,
-                output=True,
-                frames_per_buffer=chunk_size)
+                output=True)
 
 left_volume = 1
 right_volume = 1
@@ -78,6 +77,7 @@ def create_sound():
 if __name__ == "__main__":
     try:
         # Play the sound
+        update_volume(167)
         create_sound()
     finally:
         # Close the stream and terminate PyAudio
