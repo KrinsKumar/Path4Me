@@ -91,7 +91,7 @@ def call_sound_generator():
         print(f"Sound emmited for gyro: {gyro_degrees} | target: {target_degrees}")
 
         if a1 > 90 and a2 > 90:
-            update_volume(135, True)
+            update_volume(135, False)  # Beep is always False
             continue
 
         A = target_degrees - gyro_degrees
