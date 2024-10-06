@@ -24,10 +24,10 @@ def take_picture(num, val):
     image_name = f"{num}.jpg"
     image_path = os.path.join(image_folder, image_name)
 
-    sound_file = os.path.join("assets", "wait.mp3")
+    sound_file = os.path.join("utils","assets", "wait.mp3")
     if os.path.exists(sound_file):
         subprocess.run(["mpg123", sound_file])
-    time.sleep(0.2)
+        time.sleep(0.2)
 
     camera.start_preview()
 
