@@ -148,9 +148,10 @@ def take_picture(num, val):
     image_path = os.path.join(image_folder, image_name)
 
     # Start the camera preview (optional)
-    subprocess.run(["mpg123", "utils/notif.mp3"])
+    subprocess.run(["mpg123", "utils/wait.mp3"])
+    time.sleep(0.2)
+
     camera.start_preview()
-    # time.sleep(0.5)  # Give the camera time to adjust to lighting
 
     # Capture the image
     camera.capture(image_path)
