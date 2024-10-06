@@ -7,6 +7,7 @@ from utils.sensor import loop
 from utils.sound import create_sound, update_volume
 import subprocess
 import os
+import utils.keyboard_ssh
 
 mpu = mpu6050(0x68)
 
@@ -44,8 +45,8 @@ setup()
 
 gyro_offsets = calibrate_gyro()
 
-loop(gyro_offsets)
-target_degrees = full_flow() or 220
+#loop(gyro_offsets)                                                 #uncomment
+target_degrees = 220 #full_flow() or 220                            #uncomment
 gyro_degrees = 0
 
 
@@ -91,7 +92,7 @@ def call_sound_generator():
         a1 = abs(gyro_degrees - target_degrees)
         a2 = 360 - a1
 
-        print(f"Sound emmited for gyro: {gyro_degrees} | target: {target_degrees}")
+        #print(f"Sound emmited for gyro: {gyro_degrees} | target: {target_degrees}")                          #uncomment
 
         if a1 > 90 and a2 > 90:
             update_volume(135, False, True)  # No volume
