@@ -109,8 +109,8 @@ def loop(gyro_offsets):
                 take_picture(3, current_angle_x)
                 pictures_taken[1] = True
             elif (
-                current_angle_x > 265
-                and current_angle_x < 285
+                current_angle_x > 285
+                and current_angle_x < 305
                 and not pictures_taken[2]
                 and pictures_taken[1]
             ):
