@@ -5,7 +5,7 @@
 # import smbus
 # from picamera import PiCamera
 # import math
-# from utils.sound import update_volume
+# from utils.sound import ng
 # import subprocess
 
 # image_folder = "assets"  # The folder with the images
