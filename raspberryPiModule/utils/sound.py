@@ -83,7 +83,7 @@ import numpy as np
 import pyaudio
 
 # Path to your .wav file
-audio_file_path = "./music.wav"
+audio_file_path = "./utils/music.wav"
 
 # Open the .wav file
 wav_file = wave.open(audio_file_path, 'rb')
