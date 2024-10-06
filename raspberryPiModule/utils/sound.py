@@ -7,7 +7,7 @@ import time
 duration = 1  # seconds
 sampling_rate = 44100  # samples per second (standard for audio)
 frequency = 220.0  # frequency of the sound (A4)
-chunk_size = 1024  # Smaller chunks of data to process per iteration
+chunk_size = 4092  # Smaller chunks of data to process per iteration
 
 # Generate the waveform for the entire duration
 t = np.linspace(0, duration, int(sampling_rate * duration), endpoint=False)
@@ -20,7 +20,8 @@ p = pyaudio.PyAudio()
 stream = p.open(format=pyaudio.paFloat32,
                 channels=2,  # Stereo (left and right channels)
                 rate=sampling_rate,
-                output=True)
+                output=True,
+                frames_per_buffer=chunk_size)
 
 
 left_volume = 1
