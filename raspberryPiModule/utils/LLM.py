@@ -51,7 +51,7 @@ def add_lines():
         cv2.putText(
             image,
             str(text1[j - 1]),
-            (j * step + 5, height - 50),
+            (j * step + 5, height - 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
             (0,0,225),
@@ -72,7 +72,7 @@ def add_lines():
         cv2.putText(
             image,
             str(45),
-            (5, height - 50),
+            (5, height - 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
             (0,0,225),
