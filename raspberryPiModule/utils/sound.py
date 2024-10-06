@@ -65,7 +65,7 @@ def create_sound():
         try:
             stream.write(stereo_chunk.astype(np.float32).tobytes())
         except IOError as e:
-            #print(f"Stream write error: {e}")
+            print(f"Stream write error: {e}")
 
         # Move to the next chunk
         start_index = end_index % len(waveform)
