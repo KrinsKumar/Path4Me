@@ -52,10 +52,6 @@ def loop_pure(gyro_offsets):
     global gyro_degrees
     timer = time.time()  # Start the timer
     current_angle_x = 0  # Initialize the current angle
-
-    sound_file = os.path.join("utils","assets", "thanthan.mp3")
-    if os.path.exists(sound_file):
-        subprocess.run(["mpg123", sound_file])
     
     while True:
         if (time.time() - timer) > 0.1:
@@ -118,6 +114,11 @@ t3 = threading.Thread(target=create_sound)
 if __name__ == "__main__":
     t1.start()
     t2.start()
+
+    sound_file = os.path.join("utils","assets", "thanthan.mp3")
+    if os.path.exists(sound_file):
+        subprocess.run(["mpg123", sound_file])
+    
     t3.start()
 
     t1.join()

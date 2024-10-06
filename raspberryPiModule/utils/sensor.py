@@ -115,7 +115,7 @@ def loop(gyro_offsets):
             ):
                 take_picture(4, current_angle_x)
                 pictures_taken[2] = True
-            elif pictures_taken[2] and (current_angle_x < 5 or current_angle_x > 355):
+            elif pictures_taken[2] and (current_angle_x < 10):
                 sound_file = os.path.join("utils","assets", "thanthan.mp3")
                 if os.path.exists(sound_file):
                     subprocess.run(["mpg123", sound_file])
