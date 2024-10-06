@@ -26,6 +26,7 @@ stream = p.open(format=pyaudio.paFloat32,
 left_volume = 1
 right_volume = 1
 start_index = 0
+end_index = 0
 beep = False
 
 def update_volume(angle, beep_val=False):
