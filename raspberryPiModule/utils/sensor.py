@@ -118,10 +118,7 @@ def loop(gyro_offsets):
                 break
 
             print(
-                f"Current Angle X: {current_angle_x:.2f}° | R: {corrected_gyro['y']:.2f} | Y: {corrected_gyro['z']:.2f}"
-            )
-            print(
-                f"Accel: X={accel_data['x']:.2f} | Y={accel_data['y']:.2f} | Z={accel_data['z']:.2f}"
+                f"Current Angle X: {current_angle_x:.2f}"
             )
 
             timer = time.time()
