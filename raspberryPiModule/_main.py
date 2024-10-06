@@ -7,6 +7,7 @@ from utils.sensor import loop
 from utils.sound import create_sound, update_volume
 import subprocess
 import os
+from sshkeyboard import listen_keyboard
 
 mpu = mpu6050(0x68)
 
@@ -107,8 +108,17 @@ def call_sound_generator():
         else:
             update_volume(135 - A / 2)
 
+def press(key):
+    global target_degrees
+    if key == "a":
+        target_degrees -= 10
+    elif key == "d":
+        target_degrees += 10
+
 def record_keystrokes():
-    import utils.keyboard_ssh
+    listen_keyboard(
+        on_press=press,
+        )
 
 t1 = threading.Thread(target=loop_pure, args=(gyro_offsets,))
 t2 = threading.Thread(target=call_sound_generator)
