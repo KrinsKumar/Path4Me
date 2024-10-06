@@ -49,7 +49,7 @@ setup()
 gyro_offsets = calibrate_gyro()
 
 #loop(gyro_offsets)                                                 #uncomment
-target_degrees = 220 #full_flow() or 220                            #uncomment
+target_degrees = 180 #full_flow() or 220                            #uncomment
 gyro_degrees = 0
 
 
