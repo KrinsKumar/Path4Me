@@ -31,7 +31,7 @@ beep = False
 
 def update_volume(angle, beep_val=False):
     global beep, start_index, current_byte, chunk_size, waveform
-    print("new volume: ", angle)
+    #print("new volume: ", angle)
 
     left_volume = math.fabs(math.sin(math.radians(angle)))
     right_volume = math.fabs(math.cos(math.radians(angle)))
@@ -52,20 +52,20 @@ def update_volume(angle, beep_val=False):
     stereo_chunk[:, 0] = left_volume * chunk  # Left channel
     stereo_chunk[:, 1] = right_volume * chunk  # Right channel
     current_byte = stereo_chunk
-    print("new byte ", current_byte)
+    #print("new byte ", current_byte)
 
 
 def create_sound():
     global start_index, left_volume, right_volume, beep, current_byte
 
     while True:
-        print("using byte: ", current_byte)
+        #print("using byte: ", current_byte)
         stereo_chunk = current_byte 
         # Write the chunk to the audio stream
         try:
             stream.write(stereo_chunk.astype(np.float32).tobytes())
         except IOError as e:
-            print(f"Stream write error: {e}")
+            #print(f"Stream write error: {e}")
 
         # Move to the next chunk
         start_index = end_index % len(waveform)
