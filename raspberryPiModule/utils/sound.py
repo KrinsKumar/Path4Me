@@ -6,7 +6,7 @@ import time
 # Parameters
 duration = 1  # seconds
 sampling_rate = 44100  # samples per second (standard for audio)
-frequency = 220.0  # frequency of the sound (A4)
+frequency = 180.0  # frequency of the sound (A4)
 chunk_size = 1024  # Increased chunk size to reduce underrun errors
 current_byte = 0
 
@@ -32,8 +32,8 @@ beep = False
 def update_volume(angle, beep_val=False):
     """Update the stereo volumes based on angle input (in degrees)."""
     global left_volume, right_volume, beep
-    left_volume = math.fabs(math.sin(math.radians(angle)))
-    right_volume = math.fabs(math.cos(math.radians(angle)))
+    left_volume = math.fabs(math.sin(math.radians(angle))) / 1.5
+    right_volume = math.fabs(math.cos(math.radians(angle))) / 1.5
     beep = beep_val
     
 def create_stereo_chunk(chunk, left_vol, right_vol):
