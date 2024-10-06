@@ -8,6 +8,7 @@ duration = 1  # seconds
 sampling_rate = 44100  # samples per second (standard for audio)
 frequency = 220.0  # frequency of the sound (A4)
 chunk_size = 8192  # Increased chunk size to reduce underrun errors
+current_byte = 0
 
 # Generate the waveform for the entire duration
 t = np.linspace(0, duration, int(sampling_rate * duration), endpoint=False)
@@ -29,31 +30,35 @@ start_index = 0
 beep = False
 
 def update_volume(angle, beep_val=False):
-    global left_volume, right_volume, beep
+    global beep, start_index, current_byte, chunk_size, waveform
 
     left_volume = math.fabs(math.sin(math.radians(angle)))
     right_volume = math.fabs(math.cos(math.radians(angle)))
 
     beep = beep_val
 
+    # Calculate the end index for the current chunk
+    end_index = start_index + chunk_size
+
+    # Check if we need to wrap around to the beginning of the waveform
+    if end_index > len(waveform):
+        chunk = np.concatenate((waveform[start_index:], waveform[:end_index % len(waveform)]))
+    else:
+        chunk = waveform[start_index:end_index]
+
+    # Create the stereo chunk
+    stereo_chunk = np.zeros((len(chunk), 2))
+    stereo_chunk[:, 0] = left_volume * chunk  # Left channel
+    stereo_chunk[:, 1] = right_volume * chunk  # Right channel
+    current_byte = stereo_chunk
+
+
 def create_sound():
-    global start_index, left_volume, right_volume, beep
+    global start_index, left_volume, right_volume, beep, current_byte
 
     while True:
-        # Calculate the end index for the current chunk
-        end_index = start_index + chunk_size
-
-        # Check if we need to wrap around to the beginning of the waveform
-        if end_index > len(waveform):
-            chunk = np.concatenate((waveform[start_index:], waveform[:end_index % len(waveform)]))
-        else:
-            chunk = waveform[start_index:end_index]
-
-        # Create the stereo chunk
-        stereo_chunk = np.zeros((len(chunk), 2))
-        stereo_chunk[:, 0] = left_volume * chunk  # Left channel
-        stereo_chunk[:, 1] = right_volume * chunk  # Right channel
-
+      
+        stereo_chunk = current_byte 
         # Write the chunk to the audio stream
         try:
             stream.write(stereo_chunk.astype(np.float32).tobytes())
