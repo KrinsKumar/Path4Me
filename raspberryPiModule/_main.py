@@ -13,7 +13,7 @@ mpu = mpu6050(0x68)
 
 def calibrate_gyro():
     print("Calculating gyro offset, do not move MPU6050...")
-    time.sleep(10)
+    time.sleep(2)
     n_samples = 1000
     gyro_offsets = {"x": 0, "y": 0, "z": 0}
 
