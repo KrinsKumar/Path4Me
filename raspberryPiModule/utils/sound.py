@@ -5,7 +5,7 @@ import time
 
 # Parameters
 duration = 1  # seconds
-sampling_rate = 44100  # samples per second (standard for audio)
+sampling_rate = 11050  # samples per second (standard for audio)
 frequency = 220.0  # frequency of the sound (A4)
 chunk_size = 1024  # Increased chunk size to reduce underrun errors
 current_byte = 0
