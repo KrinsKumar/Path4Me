@@ -34,7 +34,7 @@ def add_lines():
     text1 = [35, 25, 15, 5, 355, 345]
     for j in range(1, 7):
         cv2.line(
-            image, (j * step, 0), (j * step, height), (0, 0, 0), 10
+            image, (j * step, 0), (j * step, height), (255,0,0), 10
         )  # Thicker and black lines
         # Add text next to each line
         cv2.putText(
@@ -43,7 +43,7 @@ def add_lines():
             (j * step + 5, 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (0, 0, 0),
+            (255,0,0),
             5,
             cv2.LINE_AA,
         )
@@ -53,7 +53,7 @@ def add_lines():
             (j * step + 5, height - 50),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (0, 0, 0),
+            (255,0,0),
             5,
             cv2.LINE_AA,
         )
@@ -64,7 +64,7 @@ def add_lines():
             (5, 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (0, 0, 0),
+            (255,0,0),
             5,
             cv2.LINE_AA,
         )
@@ -74,7 +74,7 @@ def add_lines():
             (5, height - 50),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (0, 0, 0),
+            (255,0,0),
             5,
             cv2.LINE_AA,
         )
@@ -94,7 +94,7 @@ def add_lines():
     text1 = [115, 105, 95, 85, 75, 65]
     for j in range(1, 7):
         cv2.line(
-            image, (j * step, 0), (j * step, height), (0, 0, 0), 10
+            image, (j * step, 0), (j * step, height), (255,0,0), 10
         )  # Thicker and black lines
         # Add text next to each line
         cv2.putText(
@@ -103,7 +103,7 @@ def add_lines():
             (j * step + 5, 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (0, 0, 0),
+            (255,0,0),
             5,
             cv2.LINE_AA,
         )
@@ -113,7 +113,7 @@ def add_lines():
             (j * step + 5, height - 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (0, 0, 0),
+            (255,0,0),
             5,
             cv2.LINE_AA,
         )
@@ -124,7 +124,7 @@ def add_lines():
             (5, 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (0, 0, 0),
+            (255,0,0),
             5,
             cv2.LINE_AA,
         )
@@ -134,7 +134,7 @@ def add_lines():
             (5, height - 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (0, 0, 0),
+            (255,0,0),
             5,
             cv2.LINE_AA,
         )
@@ -154,7 +154,7 @@ def add_lines():
     text1 = [205, 195, 185, 175, 165, 155]
     for j in range(1, 7):
         cv2.line(
-            image, (j * step, 0), (j * step, height), (0, 0, 0), 10
+            image, (j * step, 0), (j * step, height), (255,0,0), 10
         )  # Thicker and black lines
         # Add text next to each line
         cv2.putText(
@@ -163,7 +163,7 @@ def add_lines():
             (j * step + 5, 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (0, 0, 0),
+            (255,0,0),
             5,
             cv2.LINE_AA,
         )
@@ -173,7 +173,7 @@ def add_lines():
             (j * step + 5, height - 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (0, 0, 0),
+            (255,0,0),
             5,
             cv2.LINE_AA,
         )
@@ -184,7 +184,7 @@ def add_lines():
             (5, 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (0, 0, 0),
+            (255,0,0),
             5,
             cv2.LINE_AA,
         )
@@ -194,7 +194,7 @@ def add_lines():
             (5, height - 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (0, 0, 0),
+            (255,0,0),
             5,
             cv2.LINE_AA,
         )
@@ -214,7 +214,7 @@ def add_lines():
     text1 = [295, 285, 275, 265, 255, 245]
     for j in range(1, 7):
         cv2.line(
-            image, (j * step, 0), (j * step, height), (0, 0, 0), 10
+            image, (j * step, 0), (j * step, height), (255,0,0), 10
         )  # Thicker and black lines
         # Add text next to each line
         cv2.putText(
@@ -223,7 +223,7 @@ def add_lines():
             (j * step + 5, 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (0, 0, 0),
+            (255,0,0),
             5,
             cv2.LINE_AA,
         )
@@ -233,7 +233,7 @@ def add_lines():
             (j * step + 5, height - 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (0, 0, 0),
+            (255,0,0),
             5,
             cv2.LINE_AA,
         )
@@ -244,7 +244,7 @@ def add_lines():
             (5, 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (0, 0, 0),
+            (255,0,0),
             5,
             cv2.LINE_AA,
         )
@@ -254,7 +254,7 @@ def add_lines():
             (5, height - 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (0, 0, 0),
+            (255,0,0),
             5,
             cv2.LINE_AA,
         )
