@@ -26,7 +26,7 @@ def take_picture(num, val):
     image_name = f"{num}.jpg"
     image_path = os.path.join(image_folder, image_name)
 
-    sound_file = os.path.join("utils","assets", "new_wait.mp3")
+    sound_file = os.path.join("utils","assets", "wait.mp3")
     if os.path.exists(sound_file):
         subprocess.run(["mpg123", sound_file])
 
@@ -71,6 +71,10 @@ def loop(gyro_offsets):
     current_angle_x = 0
     pictures_taken = [False, False, False]
     take_picture(1, 0)
+
+    sound_file = os.path.join("utils","assets", "start.mp3")
+      if os.path.exists(sound_file):
+          subprocess.run(["mpg123", sound_file])
 
     prev_time = time.time()
     prev_gyro_x = 0.0

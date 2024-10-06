@@ -5,6 +5,7 @@ import cloudinary
 import cloudinary.uploader
 import cv2
 from openai import OpenAI
+import subprocess
 
 # ------------------------------Configs-------------------------------------
 cloudinary.config(
@@ -334,6 +335,9 @@ def analyze_photos():
 
 
 def full_flow():
+    sound_file = os.path.join("utils","assets", "stop.mp3")
+      if os.path.exists(sound_file):
+          subprocess.run(["mpg123", sound_file])
     print("\n--------------------------------")
     print("Sending the images for analysis...")
     print("--------------------------------\n")
