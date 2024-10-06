@@ -29,7 +29,6 @@ def take_picture(num, val):
     sound_file = os.path.join("utils","assets", "notif.mp3")
     if os.path.exists(sound_file):
         subprocess.run(["mpg123", sound_file])
-        time.sleep(0.2)
 
     camera.start_preview()
 
