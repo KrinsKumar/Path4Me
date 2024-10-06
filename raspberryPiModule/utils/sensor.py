@@ -11,6 +11,7 @@ if not os.path.exists(image_folder):
 
 mpu = mpu6050(0x68)
 
+pictures_taken = [False, False, False, False]
 
 def setup():
     print("Initializing MPU6050...")
@@ -27,7 +28,7 @@ def take_picture(num, val):
     image_path = os.path.join(image_folder, image_name)
 
     sound_file = os.path.join("utils","assets", "wait.mp3")
-    if os.path.exists(sound_file):
+    if os.path.exists(sound_file) and pictures_taken[0]:
         subprocess.run(["mpg123", sound_file])
 
     camera.start_preview()
@@ -67,10 +68,12 @@ def low_pass_filter(value, prev_value, alpha=0.5):
 
 
 def loop(gyro_offsets):
+    global pictures_taken
     timer = time.time()
     current_angle_x = 0
-    pictures_taken = [False, False, False]
+    
     take_picture(1, 0)
+    pictures_taken[0] = True
 
     sound_file = os.path.join("utils","assets", "start.mp3")
       if os.path.exists(sound_file):
@@ -100,27 +103,27 @@ def loop(gyro_offsets):
             current_angle_x += corrected_gyro["x"] * dt
             current_angle_x = current_angle_x % 360  # Normalize to 0-360 degrees
 
-            if current_angle_x > 88 and current_angle_x < 92 and not pictures_taken[0]:
+            if current_angle_x > 88 and current_angle_x < 92 and not pictures_taken[1]:
                 take_picture(2, current_angle_x)
-                pictures_taken[0] = True
+                pictures_taken[1] = True
             elif (
                 current_angle_x > 178
                 and current_angle_x < 182
-                and not pictures_taken[1]
-                and pictures_taken[0]
-            ):
-                take_picture(3, current_angle_x)
-                pictures_taken[1] = True
-            elif (
-                current_angle_x > 265
-                and current_angle_x < 285
                 and not pictures_taken[2]
                 and pictures_taken[1]
             ):
-                take_picture(4, current_angle_x)
+                take_picture(3, current_angle_x)
                 pictures_taken[2] = True
-            elif pictures_taken[2] and (current_angle_x < 10):
-                sound_file = os.path.join("utils","assets", "thanthan.mp3")
+            elif (
+                current_angle_x > 265
+                and current_angle_x < 285
+                and not pictures_taken[3]
+                and pictures_taken[2]
+            ):
+                take_picture(4, current_angle_x)
+                pictures_taken[3] = True
+            elif pictures_taken[3] and (current_angle_x < 10):
+                sound_file = os.path.join("utils","assets", "stop.mp3")
                 if os.path.exists(sound_file):
                     subprocess.run(["mpg123", sound_file])
                 break
