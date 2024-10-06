@@ -120,6 +120,7 @@ def loop(gyro_offsets):
                 sound_file = os.path.join("utils","assets", "notif.mp3")
                 if os.path.exists(sound_file):
                     subprocess.run(["mpg123", sound_file])
+                    subprocess.run(["mpg123", sound_file])
                 break
 
             print(
