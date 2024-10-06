@@ -44,7 +44,7 @@ def add_lines():
             (j * step + 5, 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (255,0,0),
+            (0,255,0),
             5,
             cv2.LINE_AA,
         )
@@ -54,7 +54,7 @@ def add_lines():
             (j * step + 5, height - 50),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (255,0,0),
+            (0,0,225),
             5,
             cv2.LINE_AA,
         )
@@ -65,7 +65,7 @@ def add_lines():
             (5, 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (255,0,0),
+            (0,255,0),
             5,
             cv2.LINE_AA,
         )
@@ -75,7 +75,7 @@ def add_lines():
             (5, height - 50),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (255,0,0),
+            (0,0,225),
             5,
             cv2.LINE_AA,
         )
@@ -104,7 +104,7 @@ def add_lines():
             (j * step + 5, 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (255,0,0),
+            (0,225,0),
             5,
             cv2.LINE_AA,
         )
@@ -114,7 +114,7 @@ def add_lines():
             (j * step + 5, height - 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (255,0,0),
+            (0,0,225),
             5,
             cv2.LINE_AA,
         )
@@ -125,7 +125,7 @@ def add_lines():
             (5, 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (255,0,0),
+            (0,225,0),
             5,
             cv2.LINE_AA,
         )
@@ -135,7 +135,7 @@ def add_lines():
             (5, height - 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (255,0,0),
+            (0,0,225),
             5,
             cv2.LINE_AA,
         )
@@ -164,7 +164,7 @@ def add_lines():
             (j * step + 5, 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (255,0,0),
+            (0,225,0),
             5,
             cv2.LINE_AA,
         )
@@ -174,7 +174,7 @@ def add_lines():
             (j * step + 5, height - 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (255,0,0),
+            (0,0,225),
             5,
             cv2.LINE_AA,
         )
@@ -185,7 +185,7 @@ def add_lines():
             (5, 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (255,0,0),
+            (0,225,0),
             5,
             cv2.LINE_AA,
         )
@@ -195,7 +195,7 @@ def add_lines():
             (5, height - 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (255,0,0),
+            (0,0,225),
             5,
             cv2.LINE_AA,
         )
@@ -224,7 +224,7 @@ def add_lines():
             (j * step + 5, 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (255,0,0),
+            (0,255,0),
             5,
             cv2.LINE_AA,
         )
@@ -234,7 +234,7 @@ def add_lines():
             (j * step + 5, height - 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (255,0,0),
+            (0,0,225),
             5,
             cv2.LINE_AA,
         )
@@ -245,7 +245,7 @@ def add_lines():
             (5, 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (255,0,0),
+            (0,255,0),
             5,
             cv2.LINE_AA,
         )
@@ -255,7 +255,7 @@ def add_lines():
             (5, height - 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
-            (255,0,0),
+            (0,0,225),
             5,
             cv2.LINE_AA,
         )
