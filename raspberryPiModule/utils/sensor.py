@@ -24,7 +24,7 @@ def take_picture(num, val):
     image_name = f"{num}.jpg"
     image_path = os.path.join(image_folder, image_name)
 
-    sound_file = os.path.join("utils","assets", "wait.mp3")
+    sound_file = os.path.join("utils","assets", "notif.mp3")
     if os.path.exists(sound_file):
         subprocess.run(["mpg123", sound_file])
         time.sleep(0.2)
@@ -115,6 +115,9 @@ def loop(gyro_offsets):
                 take_picture(4, current_angle_x)
                 pictures_taken[2] = True
             elif pictures_taken[2] and (current_angle_x < 5 or current_angle_x > 350):
+                sound_file = os.path.join("utils","assets", "notif.mp3")
+                if os.path.exists(sound_file):
+                    subprocess.run(["mpg123", sound_file])
                 break
 
             print(
