@@ -13,6 +13,7 @@ cloudinary.config(
     api_secret="P7BS5TrmZC-fW7m-ZZudlOnyXwA",  # Click 'View API Keys' above to copy your API secret
     secure=True,
 )
+allUrls = []
 # ---------------------------------------------------------------------------
 
 
@@ -290,25 +291,25 @@ def analyze_photos():
                     {
                         "type": "image_url",
                         "image_url": {
-                            "url": "https://res.cloudinary.com/djxkc3pxx/image/upload/v1728168103/1.jpg",
+                            "url": allUrls[0],
                         },
                     },
                     {
                         "type": "image_url",
                         "image_url": {
-                            "url": "https://res.cloudinary.com/djxkc3pxx/image/upload/v1728168103/2.jpg",
+                            "url": allUrls[1],
                         },
                     },
                     {
                         "type": "image_url",
                         "image_url": {
-                            "url": "https://res.cloudinary.com/djxkc3pxx/image/upload/v1728168103/3.jpg",
+                            "url": allUrls[2],
                         },
                     },
                     {
                         "type": "image_url",
                         "image_url": {
-                            "url": "https://res.cloudinary.com/djxkc3pxx/image/upload/v1728168103/4.jpg",
+                            "url": allUrls[3],
                         },
                     },
                 ],
@@ -316,7 +317,7 @@ def analyze_photos():
         ],
         max_tokens=300,
     )
-    input_string = response.choices[0]
+    input_string = response.choices[0].message.content
     print(input_string)
     # {{}}
     start = input_string.find("{{")
