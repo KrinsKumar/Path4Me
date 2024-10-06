@@ -7,7 +7,6 @@ from utils.sensor import loop
 from utils.sound import create_sound, update_volume
 import subprocess
 import os
-import utils.keyboard_ssh
 
 mpu = mpu6050(0x68)
 
@@ -108,10 +107,13 @@ def call_sound_generator():
         else:
             update_volume(135 - A / 2)
 
+def record_keystrokes():
+    import utils.keyboard_ssh
 
 t1 = threading.Thread(target=loop_pure, args=(gyro_offsets,))
 t2 = threading.Thread(target=call_sound_generator)
 t3 = threading.Thread(target=create_sound)
+t4 = threading.Thread(target=record_keystrokes)
 
 if __name__ == "__main__":
     t1.start()
@@ -122,9 +124,11 @@ if __name__ == "__main__":
         subprocess.run(["mpg123", sound_file])
     
     t3.start()
+    t4.start()
 
     t1.join()
     t2.join()
     t3.join()
+    t4.join()
 
     print("\n\nAll functions executed successfully!\n")
