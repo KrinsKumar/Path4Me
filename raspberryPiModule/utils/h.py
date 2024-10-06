@@ -229,11 +229,11 @@ def loop(gyro_offsets):
             elif current_angle_x > 178 and current_angle_x < 182 and not pictures_taken[1] and pictures_taken[0]:
                 take_picture(3, current_angle_x)
                 pictures_taken[1] = True
-            # elif current_angle_x > 235 and current_angle_x < 272 and not pictures_taken[2] and pictures_taken[1]:
-            #     take_picture(4, current_angle_x)
-            #     pictures_taken[2] = True
-            # elif pictures_taken[2] and (current_angle_x < 5 or current_angle_x > 320):
-            #     break
+            elif current_angle_x > 265 and current_angle_x < 285 and not pictures_taken[2] and pictures_taken[1]:
+                take_picture(4, current_angle_x)
+                pictures_taken[2] = True
+            elif pictures_taken[2] and (current_angle_x < 5 or current_angle_x > 350):
+                break
 
             # Print the data to the console
             print(f"Current Angle X: {current_angle_x:.2f}° | R: {corrected_gyro['y']:.2f} | Y: {corrected_gyro['z']:.2f}")
