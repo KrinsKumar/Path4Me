@@ -251,7 +251,7 @@ def add_lines():
         )
         cv2.putText(
             image,
-            str(45),
+            str(305),
             (5, height - 200),
             cv2.FONT_HERSHEY_SIMPLEX,
             2,
