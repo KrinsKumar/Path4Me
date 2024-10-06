@@ -5,6 +5,7 @@ import cloudinary
 import cloudinary.uploader
 import cv2
 from openai import OpenAI
+import subprocess
 
 # ------------------------------Configs-------------------------------------
 cloudinary.config(
