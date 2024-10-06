@@ -53,6 +53,10 @@ def loop_pure(gyro_offsets):
     timer = time.time()  # Start the timer
     current_angle_x = 0  # Initialize the current angle
 
+    sound_file = os.path.join("utils","assets", "thanthan.mp3")
+    if os.path.exists(sound_file):
+        subprocess.run(["mpg123", sound_file])
+    
     while True:
         if (time.time() - timer) > 0.1:
             # Read accelerometer and gyroscope data
